@@ -27,5 +27,6 @@ padding-right: 0.5em;
 }
 
 /* disqus */
-.post-content .post-body {
-    color: var(--primary) !important;
+#disqus_thread{
+	padding-top:30px;
+}
