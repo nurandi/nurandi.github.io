@@ -1,0 +1,28 @@
+figcaption {
+    font-size: 80% !important;
+    font-weight: normal !important;
+    font-style: italic;
+}
+
+iframe{
+    padding-bottom:10px !important ;
+}
+
+ul.contact-list {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+li.contact-socmed {
+	float: left;
+	margin-top: 0.5em;
+	margin-bottom: 0.7em;
+	margin-right: 0.5em;
+}
+
+.socmed-icon {
+padding-right: 0.5em;
+}
+

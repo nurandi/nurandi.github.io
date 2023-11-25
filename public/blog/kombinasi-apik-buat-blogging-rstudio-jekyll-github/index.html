@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub | PaperMod</title>
+<meta name="keywords" content="jekyll, RStudio, r, github, blog">
+<meta name="description" content="Sejak beralih dari Wordpress ke Jekyll dan GitHub beberapa tahun terakhir, alur untuk penulisan dan penerbitan artikel biasanya: menulis file markdown di Notepad/Notepad&#43;&#43; → jekyll serve untuk generate blog sehingga bisa dilakukan pratinjau → jika sudah sesuai, git push ke GitHub untuk menerbitkan artikel. Tidak ada yang salah dengan workflow seperti ini. Hanya saja, saya sedikit &ldquo;kerepotan&rdquo; karena ada beberapa aplikasi yang harus saya buka secara bergantian, yaitu:
+Notepad/Notepad&#43;&#43; untuk menulis artikel dalam format markdown.">
+<meta name="author" content="Nur Andi Setiabudi">
+<link rel="canonical" href="/blog/kombinasi-apik-buat-blogging-rstudio-jekyll-github/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.0c4fd3725171366f335155acde6fb3c7b7042cd2fd075bebf5023d9b28a701b2.css" integrity="sha256-DE/TclFxNm8zUVWs3m&#43;zx7cELNL9B1vr9QI9myinAbI=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="/blog/kombinasi-apik-buat-blogging-rstudio-jekyll-github/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub" />
+<meta property="og:description" content="Sejak beralih dari Wordpress ke Jekyll dan GitHub beberapa tahun terakhir, alur untuk penulisan dan penerbitan artikel biasanya: menulis file markdown di Notepad/Notepad&#43;&#43; → jekyll serve untuk generate blog sehingga bisa dilakukan pratinjau → jika sudah sesuai, git push ke GitHub untuk menerbitkan artikel. Tidak ada yang salah dengan workflow seperti ini. Hanya saja, saya sedikit &ldquo;kerepotan&rdquo; karena ada beberapa aplikasi yang harus saya buka secara bergantian, yaitu:
+Notepad/Notepad&#43;&#43; untuk menulis artikel dalam format markdown." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/blog/kombinasi-apik-buat-blogging-rstudio-jekyll-github/" /><meta property="og:image" content="/papermod-cover.png"/><meta property="article:section" content="blog" />
+<meta property="article:published_time" content="2019-12-08T21:13:14-05:00" />
+<meta property="article:modified_time" content="2019-12-08T21:13:14-05:00" />
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/papermod-cover.png"/>
+
+<meta name="twitter:title" content="Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub"/>
+<meta name="twitter:description" content="Sejak beralih dari Wordpress ke Jekyll dan GitHub beberapa tahun terakhir, alur untuk penulisan dan penerbitan artikel biasanya: menulis file markdown di Notepad/Notepad&#43;&#43; → jekyll serve untuk generate blog sehingga bisa dilakukan pratinjau → jika sudah sesuai, git push ke GitHub untuk menerbitkan artikel. Tidak ada yang salah dengan workflow seperti ini. Hanya saja, saya sedikit &ldquo;kerepotan&rdquo; karena ada beberapa aplikasi yang harus saya buka secara bergantian, yaitu:
+Notepad/Notepad&#43;&#43; untuk menulis artikel dalam format markdown."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blogs",
+      "item": "/blog/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub",
+      "item": "/blog/kombinasi-apik-buat-blogging-rstudio-jekyll-github/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub",
+  "name": "Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub",
+  "description": "Sejak beralih dari Wordpress ke Jekyll dan GitHub beberapa tahun terakhir, alur untuk penulisan dan penerbitan artikel biasanya: menulis file markdown di Notepad/Notepad++ → jekyll serve untuk generate blog sehingga bisa dilakukan pratinjau → jika sudah sesuai, git push ke GitHub untuk menerbitkan artikel. Tidak ada yang salah dengan workflow seperti ini. Hanya saja, saya sedikit \u0026ldquo;kerepotan\u0026rdquo; karena ada beberapa aplikasi yang harus saya buka secara bergantian, yaitu:\nNotepad/Notepad++ untuk menulis artikel dalam format markdown.",
+  "keywords": [
+    "jekyll", "RStudio", "r", "github", "blog"
+  ],
+  "articleBody": "Sejak beralih dari Wordpress ke Jekyll dan GitHub beberapa tahun terakhir, alur untuk penulisan dan penerbitan artikel biasanya: menulis file markdown di Notepad/Notepad++ → jekyll serve untuk generate blog sehingga bisa dilakukan pratinjau → jika sudah sesuai, git push ke GitHub untuk menerbitkan artikel. Tidak ada yang salah dengan workflow seperti ini. Hanya saja, saya sedikit “kerepotan” karena ada beberapa aplikasi yang harus saya buka secara bergantian, yaitu:\nNotepad/Notepad++ untuk menulis artikel dalam format markdown. Untuk artikel berisi koding R, saya juga menulis kode di RStudio, menjalankannya, lalu copy-paste kode dan outputnya ke dalam file markdown yang sedang saya tulis; Bash/Ubuntu for Windows untuk menjalankan Jekyll; dan Git Bash untuk push artikel ke GitHub. Saya merasa proses tersebut bisa disederhanakan.\nBeruntung saya menemukan blog David Robinson. Ia tidak menulis artikel pada file *.md, melainkan pada file RMarkdown *.Rmd. File-file markdown sebagai “core” dari Jekyll, ia generate dengan knitr – salah satu fungsi di R. Dengan cara ini, kita bisa fokus membuat artikel, file *.Rmd, di RStudio. Pratinjau artikel bisa dilakukan dengan klik icon Knit to HTML di RStudio. Untuk push ke GitHub, kita bisa integrasikan Git Bash dengan RStudio terminal. Secara ringkas, alurnya dapat digambarkan:\nMari kita lihat detailnya satu per satu.\n1. Tulis artikel dalam format RMarkdown *.Rmd di RStudio. Seluruh file RMarkdown saya simpan dalam satu folder tersendiri yaitu _Rmd. Jangan lupa untuk menuliskan YAML sebagaimana kita menuliskannya dalam file *.md. Apabila ingin melakukan pratinjau, klik ikon Knit lalu Knit to HTML. Meskipun HTML ini tidak mengunakan layout Jekyll, pratinjau ini bermanfaat untuk memeriksa penulisan.\n{% include image url=\"/img/blog/2019-12-08-kombinasi-apik-buat-blogging-rstudio-jekyll-github/rstudio.png\" alt=“RStudio” caption=“RStudio” %}\nKelebihan menggunakan RMarkdown adalah jika dalam artikel kita terdapat kode R, maka kode dan outputnya dapat diatur apakah akan ditampilkan atau tidak. Sehingga tidak ada lagi proses copy-paste. Misalnya, flowchart di atas merupakan output dari kode R (yang disembunyikan).\n```{r, echo=FALSE}\rlibrary(DiagrammeR)\rDiagrammeR(\"\rgraph TB\rA(Tulis artikel .Rmd di RStudio)\r--\u003eB(Generate file .md dengan fungsi knitr)\rB--\u003eC(Opsional: Jekyll serve untuk pratinjau)\rC--\u003eD(git push untuk unggah ke GitHub)\rB--\u003eD\rstyle C fill:yellow\r\" )\r```\rContoh lain:\n{% highlight r %} summary(cars)\n{% endhighlight %}\n{% highlight text %}\nspeed dist Min. : 4.0 Min. : 2.00 1st Qu.:12.0 1st Qu.: 26.00 Median :15.0 Median : 36.00 Mean :15.4 Mean : 42.98 3rd Qu.:19.0 3rd Qu.: 56.00 Max. :25.0 Max. :120.00 {% endhighlight %}\natau gambar/plot\n{% highlight r %} plot(pressure)\n{% endhighlight %}\n2. Generate file *.md. Dengan menjalankan _scripts/knitpages.R melalui perintah Rscript _scripts/knitpage.R di RStudio terminal, file-file *.Rmd pada folder _Rmd akan di-knit ke dalam format *.md di folder _posts. (knitpage.R saya sadur dari github.com/dgrtwo dengan sedikit perubahan).\n3. (Opsional) Jekyll serve untuk meng-compile blog dan preview. Bisa dilakukan apabila PC sudah terinstal Jekyll. Sangat bermanfaat untuk melihat tampilan sebenarnya sebelum artikel diterbitkan secara online. Saya sendiri menginstal Jekyll di Ubuntu for Windows. Sayangnya untuk menjalankan kita harus “keluar” dulu dari RStudio, buka Ubuntu, lalu ketikan perintah bundle exec jekyll serve.\n4. Langkah terakhir adalah git push ke GitHub untuk menerbitkan artikel. Apabila di PC sudah terinstal Git Bash, kita dapat menjalankan perintah berikut pada RStudio terminal;\ngit add .\rgit commit -m \"publish new article with image\"\rgit push Sebenarnya, ada workflow yang lebih menarik untuk dicoba yaitu dengan menggunakan package blogdown. Sesuai dengan namanya, blogdown merupakan R package untuk membuat blog atau website dengan R. Menariknya, blogdown juga mendukung Jekyll. Hanya saja saya belum mencobanya. Mungkin nanti, kapan-kapan.\n",
+  "wordCount" : "565",
+  "inLanguage": "en",
+  "datePublished": "2019-12-08T21:13:14-05:00",
+  "dateModified": "2019-12-08T21:13:14-05:00",
+  "author":{
+    "@type": "Person",
+    "name": "Nur Andi Setiabudi"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/blog/kombinasi-apik-buat-blogging-rstudio-jekyll-github/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "PaperMod",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="/" accesskey="h" title="PaperMod (Alt + H)">PaperMod</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch"><li>|</li>
+                    <li>
+                        <a href="/fr/" title="French"
+                            aria-label=":fr:">🇫🇷</a>
+                    </li>
+                    <li>
+                        <a href="/fa/" title="Fa"
+                            aria-label="Fa">Fa</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="/search/" title="Search">
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://discord.gg/ahpmTvhVmp" title="Discord">
+                    <span>Discord</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/adityatelange/hugo-PaperMod/wiki/" title="WiKi">
+                    <span>WiKi</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="/">Home</a>&nbsp;»&nbsp;<a href="/blog/">Blogs</a></div>
+    <h1 class="post-title">
+      Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub
+    </h1>
+    <div class="post-meta"><span title='2019-12-08 21:13:14 -0500 -0500'>December 8, 2019</span>&nbsp;·&nbsp;3 min&nbsp;·&nbsp;Nur Andi Setiabudi&nbsp;|&nbsp;<a href="https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content/blog/2019-12-08-kombinasi-apik-buat-blogging-rstudio-jekyll-github/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#speed-----------dist" aria-label="speed           dist">speed           dist</a></li>
+                <li>
+                    <a href="#min----40---min-----200" aria-label="Min.   : 4.0   Min.   :  2.00">Min.   : 4.0   Min.   :  2.00</a></li>
+                <li>
+                    <a href="#1st-qu120---1st-qu-2600" aria-label="1st Qu.:12.0   1st Qu.: 26.00">1st Qu.:12.0   1st Qu.: 26.00</a></li>
+                <li>
+                    <a href="#median-150---median--3600" aria-label="Median :15.0   Median : 36.00">Median :15.0   Median : 36.00</a></li>
+                <li>
+                    <a href="#mean---154---mean----4298" aria-label="Mean   :15.4   Mean   : 42.98">Mean   :15.4   Mean   : 42.98</a></li>
+                <li>
+                    <a href="#3rd-qu190---3rd-qu-5600" aria-label="3rd Qu.:19.0   3rd Qu.: 56.00">3rd Qu.:19.0   3rd Qu.: 56.00</a></li>
+                <li>
+                    <a href="#max---250---max---12000" aria-label="Max.   :25.0   Max.   :120.00">Max.   :25.0   Max.   :120.00</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Sejak beralih dari Wordpress ke Jekyll dan GitHub beberapa tahun terakhir, alur untuk penulisan dan penerbitan artikel biasanya: menulis <a href="/blog/format-teks-dengan-markdown">file markdown</a> di Notepad/<a href="https://notepad-plus-plus.org/">Notepad++</a> → <em>jekyll serve</em> untuk <em>generate</em> blog sehingga bisa dilakukan pratinjau → jika sudah sesuai, <em>git push</em> ke GitHub untuk menerbitkan artikel. Tidak ada yang salah dengan <em>workflow</em> seperti ini. Hanya saja, saya sedikit &ldquo;kerepotan&rdquo; karena ada beberapa aplikasi yang harus saya buka secara bergantian, yaitu:</p>
+<ul>
+<li>Notepad/Notepad++ untuk menulis artikel dalam format markdown. Untuk artikel berisi koding R, saya juga menulis kode di RStudio, menjalankannya, lalu <em>copy-paste</em> kode dan outputnya ke dalam file markdown yang sedang saya tulis;</li>
+<li><a href="/blog/apa-itu-jekyll-bagaimana-instalasinya-di-windows">Bash/Ubuntu for Windows</a> untuk menjalankan Jekyll; dan</li>
+<li><a href="https://git-scm.com/">Git Bash</a> untuk <em>push</em> artikel ke GitHub.</li>
+</ul>
+<p>Saya merasa proses tersebut bisa disederhanakan.</p>
+<p>Beruntung saya menemukan blog <a href="http://varianceexplained.org/about/">David Robinson</a>. Ia tidak menulis artikel pada file <code>*.md</code>, melainkan pada file <a href="https://rmarkdown.rstudio.com/">RMarkdown</a> <code>*.Rmd</code>. File-file markdown sebagai <em>&ldquo;core&rdquo;</em> dari Jekyll, ia <em>generate</em> dengan <a href="https://yihui.org/knitr/"><strong>knitr</strong></a> &ndash; salah satu fungsi di R. Dengan cara ini, kita bisa fokus membuat artikel, file <code>*.Rmd</code>, di RStudio. Pratinjau artikel bisa dilakukan dengan klik <em>icon Knit to HTML</em> di RStudio. Untuk <em>push</em> ke GitHub, kita bisa integrasikan <em>Git Bash</em> dengan RStudio <em>terminal</em>. Secara ringkas, alurnya dapat digambarkan:</p>
+<p><img loading="lazy" src="/img/blog/2019-12-08-kombinasi-apik-buat-blogging-rstudio-jekyll-github/unnamed-chunk-1-1.png" alt="center"  />
+</p>
+<p>Mari kita lihat detailnya satu per satu.</p>
+<p><strong>1.</strong> Tulis artikel dalam format RMarkdown <code>*.Rmd</code> di RStudio. Seluruh file RMarkdown saya simpan dalam satu folder tersendiri yaitu <code>_Rmd</code>. Jangan lupa untuk menuliskan YAML sebagaimana kita menuliskannya dalam file <code>*.md</code>. Apabila ingin melakukan pratinjau, klik ikon <strong>Knit</strong> lalu <strong>Knit to HTML</strong>. Meskipun HTML ini tidak mengunakan <em>layout</em> Jekyll, pratinjau ini bermanfaat untuk memeriksa penulisan.</p>
+<p>{% include image url=&quot;/img/blog/2019-12-08-kombinasi-apik-buat-blogging-rstudio-jekyll-github/rstudio.png&quot;
+alt=&ldquo;RStudio&rdquo; caption=&ldquo;RStudio&rdquo; %}</p>
+<p>Kelebihan menggunakan RMarkdown adalah jika dalam artikel kita terdapat kode R, maka kode dan outputnya dapat diatur apakah akan ditampilkan atau tidak. Sehingga tidak ada lagi proses <em>copy-paste</em>. Misalnya, <em>flowchart</em> di atas merupakan output dari kode R (yang disembunyikan).</p>
+<pre><code>```{r, echo=FALSE}
+library(DiagrammeR)
+DiagrammeR("
+  graph TB
+  A(Tulis artikel .Rmd di RStudio)
+   -->B(Generate file .md dengan fungsi knitr)
+  B-->C(Opsional: Jekyll serve untuk pratinjau)
+  C-->D(git push untuk unggah ke GitHub)
+  B-->D
+  style C fill:yellow
+ "  
+)
+```</code></pre>
+<p>Contoh lain:</p>
+<p>{% highlight r %}
+summary(cars)<br>
+{% endhighlight %}</p>
+<p>{% highlight text %}</p>
+<h2 id="speed-----------dist">speed           dist<a hidden class="anchor" aria-hidden="true" href="#speed-----------dist">#</a></h2>
+<h2 id="min----40---min-----200">Min.   : 4.0   Min.   :  2.00<a hidden class="anchor" aria-hidden="true" href="#min----40---min-----200">#</a></h2>
+<h2 id="1st-qu120---1st-qu-2600">1st Qu.:12.0   1st Qu.: 26.00<a hidden class="anchor" aria-hidden="true" href="#1st-qu120---1st-qu-2600">#</a></h2>
+<h2 id="median-150---median--3600">Median :15.0   Median : 36.00<a hidden class="anchor" aria-hidden="true" href="#median-150---median--3600">#</a></h2>
+<h2 id="mean---154---mean----4298">Mean   :15.4   Mean   : 42.98<a hidden class="anchor" aria-hidden="true" href="#mean---154---mean----4298">#</a></h2>
+<h2 id="3rd-qu190---3rd-qu-5600">3rd Qu.:19.0   3rd Qu.: 56.00<a hidden class="anchor" aria-hidden="true" href="#3rd-qu190---3rd-qu-5600">#</a></h2>
+<h2 id="max---250---max---12000">Max.   :25.0   Max.   :120.00<a hidden class="anchor" aria-hidden="true" href="#max---250---max---12000">#</a></h2>
+<p>{% endhighlight %}</p>
+<p>atau gambar/plot</p>
+<p>{% highlight r %}
+plot(pressure)<br>
+{% endhighlight %}</p>
+<p><img loading="lazy" src="/img/blog/2019-12-08-kombinasi-apik-buat-blogging-rstudio-jekyll-github/unnamed-chunk-3-1.png" alt="center"  />
+</p>
+<p><strong>2.</strong> <em>Generate</em> file <code>*.md</code>. Dengan menjalankan <a href="https://github.com/nurandi/nurandi.github.io/blob/master/_scripts/knitpages.R"><strong>_scripts/knitpages.R</strong></a> melalui perintah <code>Rscript _scripts/knitpage.R</code> di RStudio <em>terminal</em>, <em>file-file</em> <code>*.Rmd</code> pada folder <code>_Rmd</code> akan di-<em>knit</em> ke dalam format <code>*.md</code> di folder <code>_posts</code>. (<code>knitpage.R</code> saya sadur dari <a href="https://github.com/dgrtwo/dgrtwo.github.com/blob/master/_scripts/knitpages.R">github.com/dgrtwo</a> dengan sedikit perubahan).</p>
+<p><strong>3.</strong> (Opsional) Jekyll serve untuk meng-<em>compile</em> blog dan <em>preview</em>. Bisa dilakukan apabila PC sudah terinstal Jekyll. Sangat bermanfaat untuk melihat tampilan sebenarnya sebelum artikel diterbitkan secara <em>online</em>. Saya sendiri menginstal Jekyll di Ubuntu for Windows. Sayangnya untuk menjalankan kita harus &ldquo;keluar&rdquo; dulu dari RStudio, buka Ubuntu, lalu ketikan perintah <code>bundle exec jekyll serve</code>.</p>
+<p><strong>4.</strong> Langkah terakhir adalah <em>git push</em> ke GitHub untuk menerbitkan artikel. Apabila di PC sudah terinstal Git Bash, kita dapat menjalankan perintah berikut pada RStudio <em>terminal</em>;</p>
+<pre tabindex="0"><code>git add .
+git commit -m &#34;publish new article with image&#34;
+git push
+</code></pre><p><mark>Sebenarnya</mark>, ada <em>workflow</em> yang lebih menarik untuk dicoba yaitu dengan menggunakan <em>package</em> <a href="https://bookdown.org/yihui/blogdown/"><strong>blogdown</strong></a>. Sesuai dengan namanya, <strong>blogdown</strong> merupakan <em>R package</em> untuk membuat blog atau website dengan R. Menariknya, <strong>blogdown</strong> juga mendukung Jekyll. Hanya saja saya belum mencobanya. Mungkin nanti, kapan-kapan.</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="/tags/jekyll/">jekyll</a></li>
+      <li><a href="/tags/rstudio/">RStudio</a></li>
+      <li><a href="/tags/r/">R</a></li>
+      <li><a href="/tags/github/">github</a></li>
+      <li><a href="/tags/blog/">blog</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="next" href="/blog/apa-itu-jekyll-bagaimana-instalasinya-di-windows/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Apa Itu Jekyll dan Bagaimana Cara Instalasinya di Windows?</span>
+  </a>
+</nav>
+
+
+<div class="share-buttons">
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub on x"
+        href="https://x.com/intent/tweet/?text=Kombinasi%20Apik%20buat%20Blogging%3a%20RStudio%2c%20Jekyll%2c%20GitHub&amp;url=%2fblog%2fkombinasi-apik-buat-blogging-rstudio-jekyll-github%2f&amp;hashtags=jekyll%2cRStudio%2cr%2cgithub%2cblog">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z"/>
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub on linkedin"
+        href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fblog%2fkombinasi-apik-buat-blogging-rstudio-jekyll-github%2f&amp;title=Kombinasi%20Apik%20buat%20Blogging%3a%20RStudio%2c%20Jekyll%2c%20GitHub&amp;summary=Kombinasi%20Apik%20buat%20Blogging%3a%20RStudio%2c%20Jekyll%2c%20GitHub&amp;source=%2fblog%2fkombinasi-apik-buat-blogging-rstudio-jekyll-github%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub on reddit"
+        href="https://reddit.com/submit?url=%2fblog%2fkombinasi-apik-buat-blogging-rstudio-jekyll-github%2f&title=Kombinasi%20Apik%20buat%20Blogging%3a%20RStudio%2c%20Jekyll%2c%20GitHub">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub on facebook"
+        href="https://facebook.com/sharer/sharer.php?u=%2fblog%2fkombinasi-apik-buat-blogging-rstudio-jekyll-github%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub on whatsapp"
+        href="https://api.whatsapp.com/send?text=Kombinasi%20Apik%20buat%20Blogging%3a%20RStudio%2c%20Jekyll%2c%20GitHub%20-%20%2fblog%2fkombinasi-apik-buat-blogging-rstudio-jekyll-github%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub on telegram"
+        href="https://telegram.me/share/url?text=Kombinasi%20Apik%20buat%20Blogging%3a%20RStudio%2c%20Jekyll%2c%20GitHub&amp;url=%2fblog%2fkombinasi-apik-buat-blogging-rstudio-jekyll-github%2f">
+        <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub on ycombinator"
+        href="https://news.ycombinator.com/submitlink?t=Kombinasi%20Apik%20buat%20Blogging%3a%20RStudio%2c%20Jekyll%2c%20GitHub&u=%2fblog%2fkombinasi-apik-buat-blogging-rstudio-jekyll-github%2f">
+        <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+            <path
+                d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+        </svg>
+    </a>
+</div>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="/">PaperMod</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

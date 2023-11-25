@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>R on PaperMod</title>
+    <link>/tags/r/</link>
+    <description>Recent content in R on PaperMod</description>
+    <image>
+      <title>PaperMod</title>
+      <url>/papermod-cover.png</url>
+      <link>/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 08 Dec 2019 21:13:14 -0500</lastBuildDate><atom:link href="/tags/r/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub</title>
+      <link>/blog/kombinasi-apik-buat-blogging-rstudio-jekyll-github/</link>
+      <pubDate>Sun, 08 Dec 2019 21:13:14 -0500</pubDate>
+      
+      <guid>/blog/kombinasi-apik-buat-blogging-rstudio-jekyll-github/</guid>
+      <description>Sejak beralih dari Wordpress ke Jekyll dan GitHub beberapa tahun terakhir, alur untuk penulisan dan penerbitan artikel biasanya: menulis file markdown di Notepad/Notepad++ → jekyll serve untuk generate blog sehingga bisa dilakukan pratinjau → jika sudah sesuai, git push ke GitHub untuk menerbitkan artikel. Tidak ada yang salah dengan workflow seperti ini. Hanya saja, saya sedikit &amp;ldquo;kerepotan&amp;rdquo; karena ada beberapa aplikasi yang harus saya buka secara bergantian, yaitu:
+Notepad/Notepad++ untuk menulis artikel dalam format markdown.</description>
+    </item>
+    
+    <item>
+      <title>Membuat Peta dengan R dan Leaflet: Contoh Data Twitter</title>
+      <link>/blog/membuat-peta-dengan-r-dan-leaflet/</link>
+      <pubDate>Sun, 14 Feb 2016 12:02:43 +0700</pubDate>
+      
+      <guid>/blog/membuat-peta-dengan-r-dan-leaflet/</guid>
+      <description>Beberapa waktu lalu ketika sedang mencari cara untuk membuat peta dengan R, Google menunjukkan satu package yang sangat menarik - leaflet. Package yang dikembangkan oleh RStudio ini merupakan interface untuk membuat peta dengan memanfaatkan Leaflet, salah satu JavaScript library untuk pemetaan yang sangat populer dan tentu saja open-source.
+Berbeda dengan package lain (seperti RgoogleMaps, ggmap dan maps) yang menghasilkan peta statis, leaflet memudahkan kita untuk membuat peta interaktif yang lebih hidup hanya dengan beberapa baris kode R, tanpa perlu mempunyai pengetahuan tentang JavaScript.</description>
+    </item>
+    
+    <item>
+      <title>Twitter Authentication dengan ROAuth dan httr</title>
+      <link>/blog/twitter-authentication-dengan-roauth-dan-httr/</link>
+      <pubDate>Mon, 08 Feb 2016 09:58:11 +0700</pubDate>
+      
+      <guid>/blog/twitter-authentication-dengan-roauth-dan-httr/</guid>
+      <description>Twitter menerapkan OAuth (saat ini OAuth 1.0a) dalam penyediaan akses ke API-nya. OAuth adalah sebuah authorization framework yang memungkinkan aplikasi pihak ketiga untuk mendapatkan akses terbatas secara aman dan ringkas. Dengan OAuth, untuk melakukan request ke API Twitter, setiap aplikasi harus terlebih dahulu mendapatkan OAuth access token. Access token ini yang kemudian digunakan untuk membuat &amp;ldquo;permintaan resmi&amp;rdquo; ke API Twitter, baik REST maupun Streaming.
+Pada R, Twitter authentication dapat dilakukan dengan mudah dengan menggunakan fungsi setup_twitter_oauth() yang tersedia pada package twitteR seperti telah kita diskusikan pada artikel sebelumnya.</description>
+    </item>
+    
+    <item>
+      <title>katadasaR : Stemming Bahasa Indonesia dengan R</title>
+      <link>/blog/katadasar-stemming-bahasa-indonesia-dengan-r/</link>
+      <pubDate>Wed, 16 Dec 2015 23:35:52 +0700</pubDate>
+      
+      <guid>/blog/katadasar-stemming-bahasa-indonesia-dengan-r/</guid>
+      <description>Stemming merupakan proses menemukan kata dasar (root word) dari kata berimbuhan (affixed word) dengan cara menghilangkan semua imbuhan (affix) yang terdiri dari awalan (prefix), sisipan (infix), akhiran (suffix) dan kombinasi awalan dan akhiran (confix). Detail kata berimbuhan dalam bahasa Indonesia dan proses pembentukannya bisa dilihat pada artikel ini. Dalam text analytics, stemming merupakan salah satu proses penting yang sangat mempengaruhi kualitas hasil analisis. Ada banyak algoritma yang digunakan untuk melakukan proses stemming, diantaranya algoritma Nazief dan Andriani dan algoritma Porter.</description>
+    </item>
+    
+    <item>
+      <title>Ekspor Data R ke Text File</title>
+      <link>/blog/ekspor-data-r-ke-text-file/</link>
+      <pubDate>Sat, 15 Aug 2015 12:42:35 +0700</pubDate>
+      
+      <guid>/blog/ekspor-data-r-ke-text-file/</guid>
+      <description>Beberapa waktu lalu, di kolom [komentar]({{ site.url }}{{ site.baseurl }}/blog/twitter-mengolah-data-twitter-hasil-crawling/#comment1) dalam blog ini, ada yang nanya bagaimana caranya ekspor data dari R ke file CSV (comma separated values). Oke, di sini akan saya jelaskan.
+Ekspor data dari R ke file teks (seperti CSV, tab separated value, dan lain-lain) sangatlah mudah. Ada beberapa fungsi yang biasa saya gunakan, di antaranya write.csv() dan write.table. Keduanya ada pada package base utils yang merupakan package base (bawaan) sehingga kita tidak perlu repot-repot menginstal package tambahan.</description>
+    </item>
+    
+    <item>
+      <title>&#34;50 Shades of Grey&#34;</title>
+      <link>/blog/50-shades-of-grey/</link>
+      <pubDate>Thu, 19 Feb 2015 04:34:10 +0700</pubDate>
+      
+      <guid>/blog/50-shades-of-grey/</guid>
+      <description>Tentu saja saya tidak akan membahas novel &amp;ldquo;50 Shades of Gray&amp;rdquo; karya E. L. James yang film-nya baru-baru ini dirilis, melainkan tentang gradasi warna hitam ke putih (abu-abu atau grey) dalam R. Tidak mau dikatakan menjiplak, tapi memang lebih dari 90% isi artikel ini saya ambil dari tulisannya Andy Nicholls. All credit goes to him. Terima kasih juga pada Gregory Piatetsky yang telah berbagi artikel tersebut di twitter.
+Why limit yourself to &amp;quot;50 Shades of Grey?</description>
+    </item>
+    
+    <item>
+      <title>R Semakin Populer di GitHub</title>
+      <link>/blog/r-semakin-populer-di-github/</link>
+      <pubDate>Thu, 19 Feb 2015 00:47:36 +0700</pubDate>
+      
+      <guid>/blog/r-semakin-populer-di-github/</guid>
+      <description>GitHut.info menampilkan statistik tentang aktivitas bahasa pemrograman di GitHub menurut jumlah repositori, pushes, forks dan lain-lain. Dari situs tersebut dapat dilihat bahwa R semakin populer di GitHub dari waktu ke waktu. Pada kuarter ke-4 2014, R menempati urutan ke-12 sebagai bahasa pemrograman dengan jumlah repositori aktif terbanyak (34K repositori). Suatu repositori dianggap aktif jika pada periode ini minimal ada satu perubahan/perbaikan pada kode yang dikirim dari repositori lokal ke GitHub.com (push).</description>
+    </item>
+    
+    <item>
+      <title>twitteR: Mengolah Data Twitter Hasil Crawling</title>
+      <link>/blog/twitter-mengolah-data-twitter-hasil-crawling/</link>
+      <pubDate>Sat, 07 Feb 2015 01:56:51 +0700</pubDate>
+      
+      <guid>/blog/twitter-mengolah-data-twitter-hasil-crawling/</guid>
+      <description>Menyambung diskusi kita tentang bagaimana crawling data Twitter menggunakan package twitteR pada R, kali ini mari kita bahas bagaimana mengolah data tersebut. Raw-data yang diperoleh dari hasil crawling sebagian besar berupa list. searchTwitter() dan userTimeline() menghasilkan list dari objek status. Setiap elemen pada list tersebut berisi detail tweet yang sesuai dengan kriteria pencarian yang ditentukan. Output getUser() berupa objek user, sementara lookupUsers() berupa list dari objek user, di mana setiap elemennya berisi detail dari user.</description>
+    </item>
+    
+    <item>
+      <title>twitteR: Crawling Data Twitter Menggunakan R</title>
+      <link>/blog/crawling-data-twitter-menggunakan-r/</link>
+      <pubDate>Sat, 31 Jan 2015 01:58:34 +0700</pubDate>
+      
+      <guid>/blog/crawling-data-twitter-menggunakan-r/</guid>
+      <description>Analisis terhadap media/jejaring sosial (social media analytics) adalah alat yang ampuh untuk memahami sikap, preferensi dan opini publik di berbagai sumber online. Bagi sebuah organisasi atau perusahaan, analisis media sosial dapat memberikan keunggulan atas pesaing mereka melalui pengetahuan menyeluruh tentang bagaimana produk dan layanan mereka dirasakan oleh pelanggan atau calon pelanggan potensial. Analisis media sosial memungkinkan organisasi dan perusahan untuk membuat keputusan yang cerdas mengenai kebutuhan, sikap, pendapat, tren terbaru dan berbagai faktor yang mempengaruhi pelanggan (dari socialmediadata.</description>
+    </item>
+    
+    <item>
+      <title>Membuat Word Cloud dengan R</title>
+      <link>/blog/membuat-word-cloud-dengan-r/</link>
+      <pubDate>Tue, 27 Jan 2015 16:28:10 +0700</pubDate>
+      
+      <guid>/blog/membuat-word-cloud-dengan-r/</guid>
+      <description>Bagaimana menampilkan data teks agar menarik sekaligus mudah dipahami? Tentu akan lebih baik menggunakan grafik dibandingkan dengan bentuk tabel yang berisi angka-angka, bukan? Ada berbagai macam grafik yang bisa digunakan. Untuk data teks, word cloud adalah salah satu pilihan.
+Apa itu word cloud ? Word cloud (disebut juga text cloud atau tag cloud) merupakan salah satu metode untuk menampilkan data teks secara visual. Grafik ini populer dalam text mining karena mudah dipahami.</description>
+    </item>
+    
+    <item>
+      <title>Mengelola R Package</title>
+      <link>/blog/mengelola-r-package/</link>
+      <pubDate>Sat, 24 Jan 2015 03:18:14 +0700</pubDate>
+      
+      <guid>/blog/mengelola-r-package/</guid>
+      <description>Pada artikel sebelumnya kita telah berdiskusi tentang fungsi-fungsi yang dapat digunakan untuk instal R package, baik instal dari dari file lokal menggunakan wizard, instal otomatis dari repositori CRAN dengan fungsi install.packages() maupun instal dari GitHub menggunakan fungsi install_github() dari package devtools.
+Setelah package terinstal, biasanya kita berkeinginan untuk mengelola R packages tersebut, misalnya untuk melihat package apa saja yang sudah diinstal, memeriksa apakan suatu package sudah terinstal, meng-uninstall package dan sebagainya.</description>
+    </item>
+    
+    <item>
+      <title>Twitter Authentication dengan R</title>
+      <link>/blog/twitter-authentication-dengan-r/</link>
+      <pubDate>Sat, 17 Jan 2015 02:23:42 +0700</pubDate>
+      
+      <guid>/blog/twitter-authentication-dengan-r/</guid>
+      <description>Menggunakan paket twitteR, R dapat digunakan untuk mengambil informasi dari Twitter untuk keperluan analisis. Thanks to geoffjentry who created twitteR package and make it available for free. Agar R dan Twitter terhubung dengan baik, terlebih dahulu kita harus mendapatkan authentication. Berikut adalah proses twitter authentication dengan R:
+Mendapatkan API key dan access token Kita harus mempunyai API key dan access token dari Twitter. Caranya sangat mudah. Kita hanya perlu membuat aplikasi pada Twitter.</description>
+    </item>
+    
+    <item>
+      <title>Menginstal R Package</title>
+      <link>/blog/menginstal-r-package/</link>
+      <pubDate>Wed, 14 Jan 2015 00:29:02 +0700</pubDate>
+      
+      <guid>/blog/menginstal-r-package/</guid>
+      <description>Salah satu kenapa R menjadi sangat popular adalah ketersediaan paket/packages (kumpulan fungsi, data dan kode) R. Hingga hari ini, ada lebih dari 6 ribu paket R ada di repository CRAN. Belum termasuk paket yang disediakan sumber lain. Jumlah paket tersebut terus tumbuh dari hari-ke-hari secara eksponensial.
+Pada saat instal R untuk pertama kali, hanya beberapa paket yang ikut terinstal secara otomatis. Sementara paket lainnya harus kita instal secara manual untuk bisa digunakan.</description>
+    </item>
+    
+    <item>
+      <title>swirl: Belajar R, dengan R</title>
+      <link>/blog/swirl-belajar-r-dengan-r/</link>
+      <pubDate>Sat, 10 Jan 2015 23:10:12 +0700</pubDate>
+      
+      <guid>/blog/swirl-belajar-r-dengan-r/</guid>
+      <description>Sedang belajar R? Lupakan cara tradisional! Kini kita dapat belajar R dengan swirl. Ya, swirl adalah R package untuk belajar statistika sekaligus R. swirl mengubah R console menjadi sarana belajar yang interaktif. Menggunakan swirl, kita dapat belajar data science, statistika dan R secara mandiri, mudah dan menyenangkan. Pengguna akan mendapatkan umpan-balik sesaat setelah mamasukan kode-kode R. Informasi detail mengenai swirl dapat diperoleh di swirlstats.com atau di halaman Github ini.
+Menginstal swirl Cara paling mudah untuk menginstal swirl adalah melalui CRAN.</description>
+    </item>
+    
+    <item>
+      <title>rtweet: Crawling Data Twitter Menggunakan R</title>
+      <link>/blog/rtweet-crawling-data-twitter-menggunakan-r/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/rtweet-crawling-data-twitter-menggunakan-r/</guid>
+      <description>Sekitar empat tahun lalu, saya menulis artikel dengan judul yang hampir sama persis: twitteR: Crawling Data Twitter Menggunakan R. Pada saat itu, cara paling mudah untuk mendapatkan (crawling) data dari Twitter dengan R adalah menggunakan package twitteR. Sayangnya pada pertengahan 2016, Jeff Gentry, sang pengembang, menghentikan pengembangan dan update/maintenance terhadap package tersebut. Meskipun package twitteR masih bisa digunakan (setidaknya sampai saat ini), Mr. Jeff merekomendasikan untuk beralih menggunakan package lain yang tidak kalah kerennya, yaitu rtweet.</description>
+    </item>
+    
+    <item>
+      <title>Visualisasi Rute Lari dengan R dan Leaflet</title>
+      <link>/blog/visualisasi-rute-lari-dengan-r-dan-leaflet/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/visualisasi-rute-lari-dengan-r-dan-leaflet/</guid>
+      <description>Beberapa waktu lalu (tepatnya tiga tahun lalu :D) saya menulis artikel tentang bagaimana memetakan twit dengan menggunakan Leaflet. Kali ini, saya akan memetakan rute lari yang direkam perangkat GPS (jam tangan ber-GPS, smartphone, dan lain-lain) dengan memanfaatkan tools yang sama, yaitu R dan dan package leaflet. Jika belum familiar dengan Leaflet, ada baiknya membaca artikel ini. Bocoran singkatnya, Leaflet adalah salah satu library JavaScript paling populer untuk membuat peta interaktif (bukan peta statis).</description>
+    </item>
+    
+    <item>
+      <title>Web Scraping dengan R dan rvest</title>
+      <link>/blog/web-scraping-dengan-r-dan-rvest/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/web-scraping-dengan-r-dan-rvest/</guid>
+      <description>Di era digital sekarang ini, berbagai data dapat ditemukan dengan mudah di internet. Sebagai seorang data analis dan scientist, hal ini tentu menjadi kabar baik karena dapat meningkatkan kualitas model dan mempertajam hasil analisis. Tapi bagaimana jika data tersebut tersedia dalam website yang diperuntukan untuk dibaca melalui browser? Beberapa website memang menyediakan fasilitas untuk menyimpan data (seperti Twitter melalui API public), tapi sayangnya sebagian besar tidak. Salah satu cara yang umum dilakukan adalah dengan membuka satu-per-satu halaman web lalu &amp;ldquo;copy-paste&amp;rdquo; data secara manual - tentunya akan menyita banyak waktu jika data sangat banyak.</description>
+    </item>
+    
+    <item>
+      <title>Web Scraping dengan R dan rvest: Parsing Tabel HTML</title>
+      <link>/blog/web-scraping-dengan-r-dan-rvest-parsing-tabel-html/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/web-scraping-dengan-r-dan-rvest-parsing-tabel-html/</guid>
+      <description>{% include base_path %} Artikel ini merupakan lanjutan dari artikel sebelumnya berjudul [Web Scraping dengan R dan rvest]({{ base_path }}/blog/web-scraping-dengan-r-dan-rvest/). Silakan membaca artikel tersebut terlebih dahulu jika baru memulai mempelajari web scraping dengan rvest.
+Salah satu favorit saya dalam package rvest adalah fungsi html_table. Sesuai dengan namanya, html_table berfungsi untuk parsing tabel HTML. Maksudnya, jika data yang akan di-scrape merupakan tabel dalam suatu halaman website HTML, fungsi ini secara &amp;ldquo;ajaib&amp;rdquo; akan mengubah tabel tersebut menjadi data frame.</description>
+    </item>
+    
+  </channel>
+</rss>

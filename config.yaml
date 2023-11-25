@@ -1,0 +1,177 @@
+baseURL: "/" # if your site is in 'https', then make sure your base url isn't written using 'http' otherwise your sitemap would contain http (as opposeed to https) URLs. This would affect Google indexing of your URLs.
+title: "Nur Andi Setiabudi"
+paginate: 5
+theme: "hugo-PaperMod"
+
+enableInlineShortcodes: true
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+enableEmoji: true
+pygmentsUseClasses: true
+# googleAnalytics: UA-123-45
+
+minify:
+    disableXML: true
+    # minifyOutput: true
+
+languages:
+    en:
+        languageName: "English"
+        weight: 1
+        taxonomies:
+          category: categories
+          tag: tags
+          series: series
+        menu:
+            main:
+                - name: About
+                  url: about
+                  weight: 5
+                - name: Archive
+                  url: archives
+                  weight: 5
+                #- name: Tags
+                #  url: tags/
+                #  weight: 10
+                - name: Search
+                  url: search/
+                  weight: 10
+
+outputs:
+    home:
+        - HTML
+        - RSS
+        - JSON
+
+params:
+    #env: production # to enable google analytics, opengraph, twitter-cards and schema.
+    description: "Nur Andi Setiabudi's personal blog"
+    author: "Nur Andi Setiabudi"
+    # author: ["Me", "You"] # multiple authors
+    hideAuthor: true
+    defaultTheme: auto
+    # disableThemeToggle: true
+    ShowShareButtons: false
+    ShowReadingTime: true
+    # disableSpecial1stPost: true
+    displayFullLangName: true
+    ShowPostNavLinks: false
+    ShowBreadCrumbs: true
+    ShowCodeCopyButtons: true
+    ShowRssButtonInSectionTermList: true
+    ShowToc: false
+    comments: true
+    # images: ["papermod-cover.png"]
+
+    profileMode:
+        enabled: false
+        title: PaperMod
+        imageUrl: "#"
+        imageTitle: my image
+        # imageWidth: 120
+        # imageHeight: 120
+        buttons:
+            - name: Archives
+              url: archives
+            - name: Tags
+              url: tags
+
+    homeInfoParams:
+        Title: "Nur Andi Setiabudi ❤️"
+        Content: >
+           Welcome to my blog!
+
+            - Data scientist, R and Python programmer, and all-terrain distance runner 🏃‍♂️
+
+            -  I share my insights and experiences 💡 on using data to solve problems, building data-driven applications, and staying fit and healthy 💪
+
+    socialIcons:
+        - name: github
+          url: "https://github.com/nurandi"
+        - name: strava
+          url: "https://www.strava.com/athletes/nurandi"
+        #- name: KoFi
+        #  url: "https://ko-fi.com/adityatelange"
+        - name: Rss
+          url: "index.xml"
+
+    editPost:
+        URL: "https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content"
+        Text: "Suggest Changes" # edit text
+        appendFilePath: true # to append file path to Edit link
+
+    label:
+        text: "@nurandi"
+    #     icon: icon.png
+    #     iconHeight: 35
+
+    # analytics:
+    #     google:
+    #         SiteVerificationTag: "XYZabc"
+
+    assets:
+        disableHLJS: true
+        favicon: "favicon/favicon.ico"
+        favicon16x16: "favicon/favicon-16x16.png"
+        favicon32x32: "favicon/favicon-32x32.png"
+        apple_touch_icon: "favicon/apple-touch-icon.png"
+        safari_pinned_tab: "favicon/safari-pinned-tab.svg"
+
+    # cover:
+    #     hidden: true # hide everywhere but not in structured data
+    #     hiddenInList: true # hide on list pages and home
+    #     hiddenInSingle: true # hide on single page
+
+    # fuseOpts:
+    #     isCaseSensitive: false
+    #     shouldSort: true
+    #     location: 0
+    #     distance: 1000
+    #     threshold: 0.4
+    #     minMatchCharLength: 0
+    #     limit: 10 # refer: https://www.fusejs.io/api/methods.html#search
+    #     keys: ["title", "permalink", "summary", "content"]
+
+markup:
+    goldmark:
+        renderer:
+            unsafe: true
+    highlight:
+        noClasses: false
+        # anchorLineNos: true
+        codeFences: true
+        guessSyntax: true
+        # lineNos: true
+        style: "dracula"
+
+privacy:
+    vimeo:
+        disabled: false
+        simple: true
+
+    twitter:
+        disabled: false
+        enableDNT: true
+        simple: true
+
+    instagram:
+        disabled: false
+        simple: true
+
+    youtube:
+        disabled: false
+        privacyEnhanced: true
+
+services:
+    instagram:
+        disableInlineCSS: true
+    twitter:
+        disableInlineCSS: true
+
+disqus:
+  enable: false
+  shortname: nurandi-id
+  count: true
+

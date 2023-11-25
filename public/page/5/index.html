@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head>
+	<meta name="generator" content="Hugo 0.120.4"><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>PaperMod</title>
+
+<meta name="description" content="Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod">
+<meta name="author" content="Theme PaperMod">
+<link rel="canonical" href="/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.0c4fd3725171366f335155acde6fb3c7b7042cd2fd075bebf5023d9b28a701b2.css" integrity="sha256-DE/TclFxNm8zUVWs3m&#43;zx7cELNL9B1vr9QI9myinAbI=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" type="application/rss+xml" href="/index.xml">
+<link rel="alternate" type="application/json" href="/index.json">
+<link rel="alternate" hreflang="en" href="/">
+<link rel="alternate" hreflang="fr" href="/fr/">
+<link rel="alternate" hreflang="fa" href="/fa/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="PaperMod" />
+<meta property="og:description" content="Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod" />
+<meta property="og:type" content="website" />
+<meta property="og:url" content="/" /><meta property="og:image" content="/papermod-cover.png"/>
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/papermod-cover.png"/>
+
+<meta name="twitter:title" content="PaperMod"/>
+<meta name="twitter:description" content="Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod"/>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "PaperMod",
+  "url": "/",
+  "description": "Theme PaperMod - https://github.com/adityatelange/hugo-PaperMod",
+  "thumbnailUrl": "/favicon.ico",
+  "sameAs": [
+      "https://github.com/adityatelange/hugo-PaperMod", "https://ko-fi.com/adityatelange", "index.xml"
+  ]
+}
+</script>
+</head>
+
+<body class="list" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="/" accesskey="h" title="PaperMod (Alt + H)">PaperMod</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch"><li>|</li>
+                    <li>
+                        <a href="/fr/" title="French"
+                            aria-label=":fr:">🇫🇷</a>
+                    </li>
+                    <li>
+                        <a href="/fa/" title="Fa"
+                            aria-label="Fa">Fa</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="/search/" title="Search">
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://discord.gg/ahpmTvhVmp" title="Discord">
+                    <span>Discord</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/adityatelange/hugo-PaperMod/wiki/" title="WiKi">
+                    <span>WiKi</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main"> 
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Mengganti Theme Jekyll pada GitHub
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Salah satu nilai plus Jekyll adalah fleksibilitas untuk mengubah theme/tema. Meskipun merupakan web statis, nyatanya di jagad internet banyak sekali theme yang bisa digunakan untuk berbagai keperluan, mulai dari halaman biodata sampai web ecommerce. Tidak percaya? Silakan Googling sendiri. Hanya saja, mengganti theme sebuah blog berbasiskan Jekyll ternyata tidak semudah mengganti theme pada Wordpress yang cukup dilakukan dengan beberapa klik saja. Ada “keruwetan” sendiri. Setidaknya itu yang sama alami dalam beberapa hari terakhir saat mengganti theme blog NURANDI....</p>
+  </div>
+  <footer class="entry-footer">3 min&nbsp;·&nbsp;Nur Andi Setiabudi</footer>
+  <a class="entry-link" aria-label="post link to Mengganti Theme Jekyll pada GitHub" href="/blog/mengganti-theme-jekyll-pada-github/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>rtweet: Crawling Data Twitter Menggunakan R
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Sekitar empat tahun lalu, saya menulis artikel dengan judul yang hampir sama persis: twitteR: Crawling Data Twitter Menggunakan R. Pada saat itu, cara paling mudah untuk mendapatkan (crawling) data dari Twitter dengan R adalah menggunakan package twitteR. Sayangnya pada pertengahan 2016, Jeff Gentry, sang pengembang, menghentikan pengembangan dan update/maintenance terhadap package tersebut. Meskipun package twitteR masih bisa digunakan (setidaknya sampai saat ini), Mr. Jeff merekomendasikan untuk beralih menggunakan package lain yang tidak kalah kerennya, yaitu rtweet....</p>
+  </div>
+  <footer class="entry-footer">8 min&nbsp;·&nbsp;Nur Andi Setiabudi</footer>
+  <a class="entry-link" aria-label="post link to rtweet: Crawling Data Twitter Menggunakan R" href="/blog/rtweet-crawling-data-twitter-menggunakan-r/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Visualisasi Rute Lari dengan R dan Leaflet
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Beberapa waktu lalu (tepatnya tiga tahun lalu :D) saya menulis artikel tentang bagaimana memetakan twit dengan menggunakan Leaflet. Kali ini, saya akan memetakan rute lari yang direkam perangkat GPS (jam tangan ber-GPS, smartphone, dan lain-lain) dengan memanfaatkan tools yang sama, yaitu R dan dan package leaflet. Jika belum familiar dengan Leaflet, ada baiknya membaca artikel ini. Bocoran singkatnya, Leaflet adalah salah satu library JavaScript paling populer untuk membuat peta interaktif (bukan peta statis)....</p>
+  </div>
+  <footer class="entry-footer">11 min&nbsp;·&nbsp;Nur Andi Setiabudi</footer>
+  <a class="entry-link" aria-label="post link to Visualisasi Rute Lari dengan R dan Leaflet" href="/blog/visualisasi-rute-lari-dengan-r-dan-leaflet/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Web Scraping dengan R dan rvest
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>Di era digital sekarang ini, berbagai data dapat ditemukan dengan mudah di internet. Sebagai seorang data analis dan scientist, hal ini tentu menjadi kabar baik karena dapat meningkatkan kualitas model dan mempertajam hasil analisis. Tapi bagaimana jika data tersebut tersedia dalam website yang diperuntukan untuk dibaca melalui browser? Beberapa website memang menyediakan fasilitas untuk menyimpan data (seperti Twitter melalui API public), tapi sayangnya sebagian besar tidak. Salah satu cara yang umum dilakukan adalah dengan membuka satu-per-satu halaman web lalu “copy-paste” data secara manual - tentunya akan menyita banyak waktu jika data sangat banyak....</p>
+  </div>
+  <footer class="entry-footer">5 min&nbsp;·&nbsp;Nur Andi Setiabudi</footer>
+  <a class="entry-link" aria-label="post link to Web Scraping dengan R dan rvest" href="/blog/web-scraping-dengan-r-dan-rvest/"></a>
+</article>
+
+<article class="post-entry"> 
+  <header class="entry-header">
+    <h2>Web Scraping dengan R dan rvest: Parsing Tabel HTML
+    </h2>
+  </header>
+  <div class="entry-content">
+    <p>{% include base_path %} Artikel ini merupakan lanjutan dari artikel sebelumnya berjudul [Web Scraping dengan R dan rvest]({{ base_path }}/blog/web-scraping-dengan-r-dan-rvest/). Silakan membaca artikel tersebut terlebih dahulu jika baru memulai mempelajari web scraping dengan rvest.
+Salah satu favorit saya dalam package rvest adalah fungsi html_table. Sesuai dengan namanya, html_table berfungsi untuk parsing tabel HTML. Maksudnya, jika data yang akan di-scrape merupakan tabel dalam suatu halaman website HTML, fungsi ini secara “ajaib” akan mengubah tabel tersebut menjadi data frame....</p>
+  </div>
+  <footer class="entry-footer">7 min&nbsp;·&nbsp;Nur Andi Setiabudi</footer>
+  <a class="entry-link" aria-label="post link to Web Scraping dengan R dan rvest: Parsing Tabel HTML" href="/blog/web-scraping-dengan-r-dan-rvest-parsing-tabel-html/"></a>
+</article>
+<footer class="page-footer">
+  <nav class="pagination">
+    <a class="prev" href="/page/4/">
+      «&nbsp;Prev&nbsp;
+    </a>
+  </nav>
+</footer>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="/">PaperMod</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+</body>
+
+</html>
