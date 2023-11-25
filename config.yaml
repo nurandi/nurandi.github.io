@@ -175,3 +175,5 @@ disqus:
   shortname: "nurandi-id"
   count: true
 
+disqusShortname: "nurandi-id"
+
