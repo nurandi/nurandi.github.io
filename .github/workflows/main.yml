@@ -32,4 +32,4 @@ jobs:
           user_email: "nurandi.mail@gmail.com"
           publish_branch: master
         #   cname: example.com
-        
+
