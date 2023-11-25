@@ -172,6 +172,6 @@ services:
 
 disqus:
   enable: false
-  shortname: "" #nurandi-id
+  shortname: nurandi-id
   count: true
 
