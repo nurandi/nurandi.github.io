@@ -1,4 +1,4 @@
-name: CI
+name: publish-blog
 on: push
 jobs:
   deploy:
