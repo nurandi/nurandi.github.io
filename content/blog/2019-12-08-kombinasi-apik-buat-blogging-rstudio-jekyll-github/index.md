@@ -7,7 +7,7 @@ latex: yes
 layout: post
 published: yes
 tags: [jekyll, RStudio, r, github, blog]
-description: Blogging dengan Jekyll dan GitHub cukup dilakukan dari RStudio dengan memanfaatkan RMarkdown. Kelebihannya adalah jika dalam artikel kita terdapat kode R, maka kode dan outputnya dapat diatur apakah akan ditampilkan atau tidak. Sehingga tidak ada lagi proses copy-paste dari berbagai aplikasi. 
+excerpt: Blogging dengan Jekyll dan GitHub cukup dilakukan dari RStudio dengan memanfaatkan RMarkdown. Kelebihannya adalah jika dalam artikel kita terdapat kode R, maka kode dan outputnya dapat diatur apakah akan ditampilkan atau tidak. Sehingga tidak ada lagi proses copy-paste dari berbagai aplikasi. 
 ---
 
 
