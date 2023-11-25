@@ -26,3 +26,6 @@ li.contact-socmed {
 padding-right: 0.5em;
 }
 
+/* disqus */
+.post-content .post-body {
+    color: var(--primary) !important;
