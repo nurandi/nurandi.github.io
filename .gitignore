@@ -1,0 +1,9 @@
+.Rproj.user
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+.hugo_build.lock
+/public/
+/resources/
+'.Rproj.user/**' 
