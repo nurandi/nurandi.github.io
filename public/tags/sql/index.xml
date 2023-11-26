@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>sql on PaperMod</title>
+    <link>/tags/sql/</link>
+    <description>Recent content in sql on PaperMod</description>
+    <image>
+      <title>PaperMod</title>
+      <url>/papermod-cover.png</url>
+      <link>/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sat, 09 May 2015 04:36:00 +0700</lastBuildDate><atom:link href="/tags/sql/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>OVER dan PARTITION BY pada SQL</title>
+      <link>/blog/over-dan-partition-by-pada-sql/</link>
+      <pubDate>Sat, 09 May 2015 04:36:00 +0700</pubDate>
+      
+      <guid>/blog/over-dan-partition-by-pada-sql/</guid>
+      <description>Beberapa waktu lalu saya diminta untuk menjelaskan logic dari SQL script yang saya buat ke salah salah satu rekan. &amp;ldquo;Belum ngerti&amp;rdquo;, katanya, &amp;ldquo;banyak over partition-nya&amp;rdquo;. Padahal OVER PARTITION adalah salah satu fitur SQL yang sangat saya andalkan, sehingga jangan heran jika banyak script yang saya tulis mengandung fungsi itu di dalamnya. Apa sebenarnya fungsi dari fitur ini dan bagaimana penggunaannya. Mari kita lihat apa dan bagaimana fungsi OVER dan PARTITION BY pada SQL bekerja.</description>
+    </item>
+    
+  </channel>
+</rss>

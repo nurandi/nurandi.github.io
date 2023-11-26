@@ -1,0 +1,243 @@
+---
+title: 'rtweet: Crawling Data Twitter Menggunakan R'
+slug: rtweet-crawling-data-twitter-menggunakan-r
+author: "Nur Andi Setiabudi"
+date: "January 15, 2019"
+layout: post
+published: yes
+share-img: /img/blog/2019-01-15-rtweet-crawling-data-twitter-menggunakan-r/twitter-techgladscom.png
+status: publish
+tags:
+- r
+- twitter
+- rtweet
+excerpt: rtweet adalah R package yang berguna untuk menambang atau crawling data Twitter, baik berupa data historis (REST API) ataupun data realtime (stream API). Beberapa fungsi yang tersedia diantaranya search_tweets, get_timelines, get_followers dan get_friends.
+type: post
+---
+
+Sekitar empat tahun lalu, saya menulis artikel dengan judul yang hampir sama persis: [twitteR: Crawling Data Twitter Menggunakan R](https://www.nurandi.id/blog/crawling-data-twitter-menggunakan-r/). Pada saat itu, cara paling mudah untuk mendapatkan *(crawling)* data dari Twitter dengan R adalah menggunakan *package* [**twitteR**](https://cran.r-project.org/web/packages/twitteR/). Sayangnya pada pertengahan 2016, [Jeff Gentry](https://github.com/geoffjentry/twitteR), sang pengembang, menghentikan pengembangan dan *update/maintenance* terhadap *package* tersebut. Meskipun *package* **twitteR** masih bisa digunakan (setidaknya sampai saat ini), Mr. Jeff merekomendasikan untuk beralih menggunakan *package* lain yang tidak kalah kerennya, yaitu [**rtweet**](https://cran.r-project.org/web/packages/rtweet/index.html). 
+
+{% include image url="/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet/twitter-techgladscom.png" alt="twitter-techgladscom.png" caption="Twitter. Kredit: techglads.com" %}
+
+[**rtweet**](https://rtweet.info) dikembangkan oleh [Michael W. Kearney](https://github.com/mkearney). Versi pertama dirilis pada Agustus 2018, atau hampir bersamaan dengan pengumuman penghentian pengembangan **twitteR**. Sesuai dengan deskripsinya, **rtweet** berfungsi untuk mengakses API Twitter melalui R. Jika **twitteR** hanya mampu digunakan untuk berinteraksi dengan REST API (untuk mencari "data" historis atau yang sudah lampau), **rtweet** ini bisa juga digunakan untuk mengakses stream API *(live/realtime)*. Pada artikel ini kita bahas untuk REST API dulu ya.
+
+# Instalasi
+
+Ada dua cara, yaitu install dari [CRAN](https://cran.r-project.org/web/packages/rtweet/index.html) (untuk versi rilis terkini) dan dari [Github](https://github.com/mkearney/rtweet) (untuk versi *development*/pengembangan).
+
+### Opsi 1: dari CRAN
+
+```{r eval=FALSE, include=TRUE}
+install.packages("rtweet")
+```
+
+### Opsi 2: dari Github
+
+Note: install dari Github memerlukan *package* **devtools**
+
+```{r eval=FALSE, include=TRUE}
+install.packages("devtools")
+library(devtools)
+```
+
+```{r eval=FALSE, include=TRUE}
+install_github("mkearney/rtweet")
+```
+
+Setelah terinstal, *load package* **rtweet**
+
+```{r eval=TRUE, include=TRUE}
+library(rtweet)
+```
+
+Pelajari lebih lengkap tentang instalasi *package* R melalui artikel [Menginstal R Package](https://www.nurandi.id/blog/menginstal-r-package/).
+
+
+# API Authorization
+
+Untuk mengakses API Twitter diperlukan akun Twitter, aplikasi *(application)* dan token akses *(access token)*. Silakan pelajari langkah-langkah membuat aplikasi dan mendapatkan token akses pada artikel [Twitter Authentication dengan R](https://www.nurandi.id/blog/twitter-authentication-dengan-r/). 
+
+{% include image url="/img/blog/2019-01-15-rtweet-crawling-data-twitter-menggunakan-r/ilustrasi-app-token.png" alt="ilustrasi-app-token.png" caption="Ilustrasi Twitter App yang menampilkan keys dan tokens" %}
+
+**Note:** Pada Juli 2018, Twitter [mengubah kebijakan](https://blog.twitter.com/developer/en_us/topics/tools/2018/new-developer-requirements-to-protect-our-platform.html) terkait registrasi aplikasi baru. Kini, untuk membuat aplikasi harus menggunakan *developer account*. Saat melakukan registrasi, Twitter meminta kita untuk menjelaskan secara lebih detail hal-hal terkait dengan aplikasi. Selanjutnya Twitter akan meninjau, apakah aplikasi disetujui atau tidak. Kabar baiknya, aplikasi-aplikai yang didaftarkan sebelum diterapkannya kebijakan baru ini masih bisa digunakan. *Setidaknya sampai hari ini*. Info selengkapnya [di sini](https://blog.twitter.com/developer/en_us/topics/tools/2018/new-developer-requirements-to-protect-our-platform.html).
+
+Setelah membuat aplikasi, proses selanjutnya adalah otentikasi *(authentication)* agar R melalui **rtweet** bisa berinteraksi dengan API Twitter. Proses ini ada dua opsi, yaitu (1) melalui browser dan (2) dengan *access token*. Keduanya dengan menggunakan fungsi `create_token()`. Silakan pilih salah satu.
+
+### Opsi 1: Otentikasi melalui browser
+
+Opsi ini membutuhkan:
+
+* *Consumer API key*
+* *Consumer API **secret** key*
+
+```{r eval=FALSE, include=TRUE}
+token <- create_token(
+  consumer_key = "XXXXXk4gFgjuI6hx05zwaGh0Q",
+  consumer_secret = "XXXXXCPPWEBJhYS4Z7rDVGZt3y1dkVehTnSe7wsM0NKVWBDLoV")
+```
+
+R otomatis akan membuka *browser*, meminta *login* ke Twitter dan menampilkan pesan:
+
+```
+Authentication complete. Please close this page and return to R.
+```
+
+Ini berarti otentikasi berhasil.
+
+
+### Opsi 2: Otentikasi dengan *access token/secret*
+
+Selain *consumer API dan API secret key*, opsi ini juga membutuhkan:
+
+* *Access token*
+* *Access token secret*
+
+```{r eval=FALSE, include=TRUE}
+token <- create_token(
+  consumer_key = "XXXXXk4gFgjuI6hx05zwaGh0Q",
+  consumer_secret = "XXXXXCPPWEBJhYS4Z7rDVGZt3y1dkVehTnSe7wsM0NKVWBDLoV",
+  access_token = "XXXXX937-XXXXXu6x7wR70mUAWc1BCc7gJIOdfugps6iFgU6GO",
+  access_secret = "XXXXXkUqEsfnfsy31GSLIEyaiDLB0UC2rw8EP1gNaLTc7")
+```
+
+Jika tidak muncul *error*, berarti proses otentikasi sukses.
+
+
+**Note:** *Consumer API key*, *consumer API secret key*, *access token* dan *access token secret* di atas hanya contoh, silakan ganti dengan nilai yang sesuai.
+
+
+# Crawling Data Twitter
+
+Setelah proses otentikasi berhasil, kita siap untuk "menambang" data *(crawling)* dari Twitter. Untuk kepeluan ini, **rtweet** mengemas berbagai fungsi yang cukup lengkap, di antaranya:
+
+* `search_tweets()` : mencari *tweet* dengan kata kunci tertentu
+* `lookup_users()` : menampilkan data detail dari satu atau lebih *user(s)* 
+* `get_timelines()` : menampilkan *status/tweet* yang pernah diposting oleh user tertentu aka *timeline*
+* `get_followers()` : menampilkan *list followers* dari user tertentu
+* `get_friends()` : menampilkan *list fiends/followings* atau yang di-follow user tentu
+* dan masih banyak yang lain seperti untuk menampilkan *retweet*, siapa yang me-*retweet*, mendapatkan *list favorite*, menampilkan *trending topics*, *cleansing* *tweet*, dan juga ekspor data ke *file csv*.
+
+### `search_tweets()`
+
+Mencari *tweet* yang memuat kata kunci tertentu. Secara *default*, dalam sekali dijalankan akan memberikan **MAKSIMAL** 18.000 *tweets*, yang merupakan sampel dari historis **tujuh hari terakhir**. Bagaimana kalau ingin lebih dari 18 ribu atau lebih dari tujuh hari? Salah satu caranya dengan membuat akun *premium* atau *entreprise*. Lebih lengkap tentang ketentuan ini bisa dibaca di [sini](https://developer.twitter.com/en/docs/tweets/search/overview).
+
+{% include image url="/img/blog/2019-01-15-rtweet-crawling-data-twitter-menggunakan-r/search-tweet.png" alt="search-tweet.png" caption="Ilustrasi search pada Twitter" %}
+
+**Contoh**: mencari (hingga) 1.000 *tweets* yang memuat kata kunci [**"pengaturan skor"**](https://twitter.com/search?l=&q=pengaturan%20skor&src=typd&lang=en)
+
+```{r eval=FALSE, include=TRUE}
+tweet <- search_tweets(q = "kota bogor", n = 1000)
+```
+
+```{r eval=TRUE, include=FALSE}
+tweet <- search_tweets(q = "kota bogor", n = 1000)
+```
+
+Objek **tweet** merupakan *data frame/tibble* dengan lebih dari 80 variabel/kolom. Silakan tampilkan dengan perintah:
+
+```{r eval=FALSE, include=TRUE}
+colnames(tweet)
+```
+
+Kita lihat tiga kolom di antaranya:
+
+```{r}
+tweet[,c("created_at", "screen_name", "text")]
+```
+
+*Keyword/query* dapat berupa satu atau beberapa kata, namun hindari *keyword* yang kompleks. Menurut Twitter, query sebaiknya tidak lebih dari 10 kata. Berikut contoh cara penulisan *keyword*:
+
+| Query              | Untuk mencari tweet yang mengandung:                        |
+|--------------------|-------------------------------------------------------------|
+| `"bogor"`          | kata "bogor"                                                |
+| `"kota bogor"`     | kata "kota" dan kata "bogor" (tidak memperhatikan   urutan) |
+| `"\"kota bogor\""` | frase "kota bogor"                                          |
+| `"kota OR bogor"`  | kata "kota" atau kata "bogor" atau keduanya                 |
+| `"kota -bogor"`    | kata "kota" tapi tidak memuat kata "bogor"                  |
+| `"#bogor"`         | *hashtag* "bogor"                                           |
+| `"@bogor"`         | *mention* "bogor"                                           |
+
+
+### `get_timelines()`
+
+Menampilkan *timeline* atau *status/tweet* **terbaru** yang pernah di-*posting* oleh satu atau beberapa *user(s)*. Setiap *user* akan ditampilkan hingga maksimal 3.200 *tweet*.
+
+**Contoh**: Menapilkan *timeline* dari [**"nurandi"**](https://twitter.com/nurandi)
+
+```{r}
+timeline <- get_timeline("nurandi")
+```
+
+Objek yang dihasilkan berupa *data frame/tibble* dengan lebih dari 80 kolom. 
+
+```{r}
+timeline[,c("created_at", "source", "text")]
+```
+
+
+### `lookup_users()`
+
+Menampilkan data detail dari satu atau lebih akun/*user(s)*.
+
+**Contoh**: Menampilkan detail dari [**"nurandi"**](https://twitter.com/nurandi)
+
+
+```{r eval=TRUE, include=TRUE}
+user <- lookup_users("nurandi")
+```
+
+Objek yang dihasilkan juga merupakan *data frame/tibble* dengan lebih dari 80 kolom.
+
+```{r}
+user[,c("created_at", "screen_name", "name", "location", "description")]
+```
+
+Untuk *lookup* beberapa *user(s)*, input harus berupa *vector*. Misal:
+
+```{r eval=TRUE, include=TRUE}
+users <- lookup_users(c("nurandi", "jokowi", "billgates", "mosalah"))
+```
+
+```{r}
+users[,c("created_at", "screen_name", "name", "location", "description")]
+```
+
+
+### `get_followers()` dan `get_friends()`
+
+Menampilkan *list* dari *followers* (yang mem-follow) dan *list* dari *followings/friends* (yang di-follow) oleh akun/user tertentu.
+
+**Contoh**: Menampilkan *list followers* dari [**"nurandi"**](https://twitter.com/nurandi)
+
+```{r eval=TRUE, include=TRUE}
+followers <- get_followers("nurandi")
+followings <- get_friends("nurandi")
+```
+
+Output yang dihasilkan berupa *tibble* dari *user_id*.
+
+```{r eval=TRUE, include=TRUE}
+followers
+```
+
+```{r eval=TRUE, include=TRUE}
+followings
+```
+
+Selanjutnya, untuk mendapatkan detail dari *list user ID followers/friends*, kita dapat menggunakan fungsi `lookup_users()`. Misal:
+
+```{r}
+detail_followings <- lookup_users(followings$user_id)
+```
+
+```{r}
+detail_followings[,c("created_at", "screen_name", "location", "description")]
+```
+
+Fungsi-fungsi yang kita bahas tadi hanya sebagian dari fitur yang tersedia pada *package* **rtweet**. Juga masih banyak parameter yang bisa ditambahkan agar pencarian yang kita lakukan sesuai kebutuhan. Untuk mengetahui fungsi-fungsi tersebut secara detail termasuk parameter yang bisa digunakan, ketik `?` diikuti nama fungsi. Misal `?search_tweets`. Atau, bisa juga pelajari referensi pada laman [rtweet.info](https://rtweet.info/reference/flatten.html). 
+
+Selamat menambang data :)
+
+
+
+

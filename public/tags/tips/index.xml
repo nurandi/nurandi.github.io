@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>tips on PaperMod</title>
+    <link>/tags/tips/</link>
+    <description>Recent content in tips on PaperMod</description>
+    <image>
+      <title>PaperMod</title>
+      <url>/papermod-cover.png</url>
+      <link>/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 31 Jan 2016 00:57:53 +0700</lastBuildDate><atom:link href="/tags/tips/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Syntax Highlighter dengan Prism.js pada Wordpress</title>
+      <link>/blog/syntax-highlighter-dengan-prism-js-pada-wordpress/</link>
+      <pubDate>Sun, 31 Jan 2016 00:57:53 +0700</pubDate>
+      
+      <guid>/blog/syntax-highlighter-dengan-prism-js-pada-wordpress/</guid>
+      <description>Beberapa waktu lalu, sesaat setelah mengganti theme blog ini dari TwentyFifteen menjadi Designer, saya mencari syntax highlighter untuk mempercantik (prettify) tampilan kode yang saya posting di sini. Dari hasil pencarian dengan Google, ada banyak yang bisa dipasang pada Wordpress. Namun, saya lebih tertarik untuk menggunakan prism.js. Alasannya sederhana: kombinasi warnanya yang saya rasa cocok dengan theme secara keseluruhan, ukuran file javascript maupun css yang sangat kecil sehingga waktu loading sangat cepat, mudah cara memasang dan menggunakannya, dan yang terpenting, prism.</description>
+    </item>
+    
+    <item>
+      <title>Langkah Mudah Menjadi Data Scientist</title>
+      <link>/blog/langkah-mudah-menjadi-data-scientist/</link>
+      <pubDate>Wed, 13 May 2015 23:24:02 +0700</pubDate>
+      
+      <guid>/blog/langkah-mudah-menjadi-data-scientist/</guid>
+      <description>Mmmm &amp;hellip; tidak terlalu mudah, memang. Berikut adalah delapan langkah mudah untuk menjadi seorang data scientist menurut DataCamp.com
+Get good at stats, math and machine learning Ketiga skill ini sangat mendasar bagi seorang data scientist. Jika tidak bisa belajar di bangku universitas, kita bisa belajar secara online misalnya melalui Udacity, Coursera dan UDemy.
+{% capture fig_img %} ![How-to-become-a-data-scientist-Datacamp]({{ site.url }}{{ site.base_url }}/img/blog/2015-05-13-langkah-mudah-menjadi-data-scientist/datacamp-How-to-become-a-data-scientist.jpg) {% endcapture %}
+{% capture fig_caption %} Become a data scientist in 8 steps: the infographic (DataCamp.</description>
+    </item>
+    
+  </channel>
+</rss>

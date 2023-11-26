@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="en" dir="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Visualisasi Rute Lari dengan R dan Leaflet | PaperMod</title>
+<meta name="keywords" content="r, leaflet, strava, rute, gis, data-viz, running, marathon">
+<meta name="description" content="Beberapa waktu lalu (tepatnya tiga tahun lalu :D) saya menulis artikel tentang bagaimana memetakan twit dengan menggunakan Leaflet. Kali ini, saya akan memetakan rute lari yang direkam perangkat GPS (jam tangan ber-GPS, smartphone, dan lain-lain) dengan memanfaatkan tools yang sama, yaitu R dan dan package leaflet. Jika belum familiar dengan Leaflet, ada baiknya membaca artikel ini. Bocoran singkatnya, Leaflet adalah salah satu library JavaScript paling populer untuk membuat peta interaktif (bukan peta statis).">
+<meta name="author" content="Nur Andi Setiabudi">
+<link rel="canonical" href="/blog/visualisasi-rute-lari-dengan-r-dan-leaflet/">
+<link crossorigin="anonymous" href="/assets/css/stylesheet.0c4fd3725171366f335155acde6fb3c7b7042cd2fd075bebf5023d9b28a701b2.css" integrity="sha256-DE/TclFxNm8zUVWs3m&#43;zx7cELNL9B1vr9QI9myinAbI=" rel="preload stylesheet" as="style">
+<link rel="icon" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="mask-icon" href="/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="/blog/visualisasi-rute-lari-dengan-r-dan-leaflet/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --hljs-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-track {
+                background: 0 0;
+            }
+
+            .list:not(.dark)::-webkit-scrollbar-thumb {
+                border-color: var(--theme);
+            }
+        }
+
+    </style>
+</noscript><meta property="og:title" content="Visualisasi Rute Lari dengan R dan Leaflet" />
+<meta property="og:description" content="Beberapa waktu lalu (tepatnya tiga tahun lalu :D) saya menulis artikel tentang bagaimana memetakan twit dengan menggunakan Leaflet. Kali ini, saya akan memetakan rute lari yang direkam perangkat GPS (jam tangan ber-GPS, smartphone, dan lain-lain) dengan memanfaatkan tools yang sama, yaitu R dan dan package leaflet. Jika belum familiar dengan Leaflet, ada baiknya membaca artikel ini. Bocoran singkatnya, Leaflet adalah salah satu library JavaScript paling populer untuk membuat peta interaktif (bukan peta statis)." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/blog/visualisasi-rute-lari-dengan-r-dan-leaflet/" /><meta property="og:image" content="/papermod-cover.png"/><meta property="article:section" content="blog" />
+
+
+
+<meta name="twitter:card" content="summary_large_image"/>
+<meta name="twitter:image" content="/papermod-cover.png"/>
+
+<meta name="twitter:title" content="Visualisasi Rute Lari dengan R dan Leaflet"/>
+<meta name="twitter:description" content="Beberapa waktu lalu (tepatnya tiga tahun lalu :D) saya menulis artikel tentang bagaimana memetakan twit dengan menggunakan Leaflet. Kali ini, saya akan memetakan rute lari yang direkam perangkat GPS (jam tangan ber-GPS, smartphone, dan lain-lain) dengan memanfaatkan tools yang sama, yaitu R dan dan package leaflet. Jika belum familiar dengan Leaflet, ada baiknya membaca artikel ini. Bocoran singkatnya, Leaflet adalah salah satu library JavaScript paling populer untuk membuat peta interaktif (bukan peta statis)."/>
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Blogs",
+      "item": "/blog/"
+    }
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Visualisasi Rute Lari dengan R dan Leaflet",
+      "item": "/blog/visualisasi-rute-lari-dengan-r-dan-leaflet/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Visualisasi Rute Lari dengan R dan Leaflet",
+  "name": "Visualisasi Rute Lari dengan R dan Leaflet",
+  "description": "Beberapa waktu lalu (tepatnya tiga tahun lalu :D) saya menulis artikel tentang bagaimana memetakan twit dengan menggunakan Leaflet. Kali ini, saya akan memetakan rute lari yang direkam perangkat GPS (jam tangan ber-GPS, smartphone, dan lain-lain) dengan memanfaatkan tools yang sama, yaitu R dan dan package leaflet. Jika belum familiar dengan Leaflet, ada baiknya membaca artikel ini. Bocoran singkatnya, Leaflet adalah salah satu library JavaScript paling populer untuk membuat peta interaktif (bukan peta statis).",
+  "keywords": [
+    "r", "leaflet", "strava", "rute", "gis", "data-viz", "running", "marathon"
+  ],
+  "articleBody": "Beberapa waktu lalu (tepatnya tiga tahun lalu :D) saya menulis artikel tentang bagaimana memetakan twit dengan menggunakan Leaflet. Kali ini, saya akan memetakan rute lari yang direkam perangkat GPS (jam tangan ber-GPS, smartphone, dan lain-lain) dengan memanfaatkan tools yang sama, yaitu R dan dan package leaflet. Jika belum familiar dengan Leaflet, ada baiknya membaca artikel ini. Bocoran singkatnya, Leaflet adalah salah satu library JavaScript paling populer untuk membuat peta interaktif (bukan peta statis). Package leaflet dikembangkan oleh RStudio untuk memudahkan pembuatan peta melalui R, tanpa harus menulis kode JavaScript.\nData yang diperlukan Tentu saja yang paling utama adalah data tracking/rute (lari, bersepeda, dan lain-lain) dalam bentuk titik-titik koordinat (latitide-longitude). Data tersebut direkam dengan perangkat atau aplikasi GPS dan biasanya disimpan dalam format GPX (GPS exchange format), TCX (training center XML), FIT (flexible and interoperable data transfer), atau format lainnya. Contoh pada artikel ini akan menggunakan data berformat GPX. File GPX dapat diperoleh dari aplikasi sport tracking seperti Garmin Connect, Endomondo dan Strava.\nGarmin Connect (web) : klik Activities → All Activities → pilih salah satu activity → simbol gear ⚙ → Export to GPX. Endomondo (web) : klik Training → Workouts atau History → pilih salah satu workout → simbol ⋁ → Export → pilih GPX Format → Export. Strava (web) : klik Training Log atau My Activities → pilih salah satu activity → simbol three dots ⋯ → Export GPX. Tidak pernah menggunakan aplikasi tracking atau tidak punya file GPX? Silakan download punya saya di sini.\n{% include base_path %}\n{% capture fig_img %} ![Strava-map]({{ base_path }}/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet/strava-map.png) {% endcapture %}\n{{ fig_img | markdownify | remove: \"\" | remove: \"\n\" }}\rPeta rute lari pada Strava beserta foto sepanjang rute yang ditampilkan dalam bentuk *pop-up*. [Klik untuk lihat detail.](https://www.strava.com/activities/2474503416)\rNice to have: Jika saat lari sempat ambil foto (menggunakan smartphone atau kamera digital dengan location-enabled), kita bisa memasangnya pada peta dalam bentuk pop-up (lihat screen-shot Strava di atas). Ini akan saya bahas pada artikel ini. Silakan ambil foto-fotonya di sini jika menggunakan file GPX saya.\nPackage(s) Ada tiga packages yang akan digunakan, yaitu:\nplotKML untuk membaca file GPX. Alternatif lain adalah package XML dan maptools. exifr untuk membaca exif (exchangeable image format) atau metadata dari image, dalam hal ini kita akan membaca titik koordinat (latitude-longitude) di mana sebuah foto diambil. leaflet untuk membuat peta. Jika package(s) tersebut belum terinstal pada R, silakan instal terlebih dahulu dengan perintah\n{% highlight r %} install.packages(c(“plotKML”, “exifr”, “leaflet”)) {% endhighlight %}\nKhusus leaflet, bisa juga instal versi development-nya dari Github. exifr berjalan dengan di atas Perl. Silakan instal salah satu aplikasi Perl agar exifr dapat berfungsi sebagaimana mestinya.\n{% highlight r %} if (!require(“devtools”)) install.packages(“devtools”) devtools::install_github(“rstudio/leaflet”) {% endhighlight %}\nSetelah itu, load semua packages.\n{% highlight r %} library(plotKML) library(exifr) library(leaflet) {% endhighlight %}\nLet’s map your running route! Data sudah tersedia. Package(s) yang diperlukan sudah terinstal. Let’s map your running route! Ada beberapa tahapan sederhana yang harus dilakukan, yaitu membaca file GPX, membaca exif dari foto, dan membuat peta.\nMembaca file GPX untuk mendapatkan titik-titik koordinat dari rute File GPX dapat dibaca menggunakan fungsi readGPX yang tersedia pada package plotKML.\n{% highlight r %} gpx_file \u003c- “Light_Trail_at_Laurel_Creek.gpx” route \u003c- readGPX(gpx_file) {% endhighlight %}\n{% highlight r %} str(route) {% endhighlight %}\n{% highlight text %}\nList of 5 $ metadata : NULL $ bounds : NULL $ waypoints: NULL $ tracks :List of 1 ..$ :List of 1 .. ..$ Light Trail at Laurel Creek 🏞️:‘data.frame’:\t7995 obs. of 5 variables: .. .. ..$ lon : num [1:7995] -80.5 -80.5 -80.5 -80.5 -80.5 … .. .. ..$ lat : num [1:7995] 43.5 43.5 43.5 43.5 43.5 … .. .. ..$ ele : chr [1:7995] “335.3” “335.3” “335.2” “335.1” … .. .. ..$ time : chr [1:7995] “2019-06-23T13:08:04Z” “2019-06-23T13:08:05Z” “2019-06-23T13:08:06Z” “2019-06-23T13:08:07Z” … .. .. ..$ extensions: chr [1:7995] “14258” “1420” “1420” “1410” … $ routes : NULL {% endhighlight %}\nObjek route merupakan list dengan lima elemen. Yang akan kita gunakan adalah elemen data-frame pada element tracks.\n{% highlight r %} route \u003c- route$tracks[[1]][[1]] str(route) {% endhighlight %}\n{% highlight text %}\n‘data.frame’:\t7995 obs. of 5 variables: $ lon : num -80.5 -80.5 -80.5 -80.5 -80.5 … $ lat : num 43.5 43.5 43.5 43.5 43.5 … $ ele : chr “335.3” “335.3” “335.2” “335.1” … $ time : chr “2019-06-23T13:08:04Z” “2019-06-23T13:08:05Z” “2019-06-23T13:08:06Z” “2019-06-23T13:08:07Z” … $ extensions: chr “14258” “1420” “1420” “1410” … {% endhighlight %}\nSekarang objek route berupa data-frame dengan kolom-kolom: long (longitude), lat (latitude), ele (elevation), time dan extensions.\nMembaca exif dari foto untuk mendapatkan titik koordinatnya Exif atau medatada bisa dibaca dengan fungsi read_exif pada package exifr. Saya asumsikan file-file foto berapa pada folder img di working directory.\n{% highlight r %} picture_files \u003c- list.files(“img”, full.names = TRUE)\npicture_point \u003c- read_exif(picture_files, tags = c(“FileName”, “GPSLatitude”, “GPSLongitude”), quiet = TRUE) {% endhighlight %}\nParameter tag berguna untuk memilih tag atau informasi apa saja yang akan diambil. Jika ingin mengambil semua informasi yang tersedia, hilangkan parameter tersebut.\n{% highlight r %} str(picture_point) {% endhighlight %}\n{% highlight text %}\nClasses ’tbl_df’, ’tbl’ and ‘data.frame’:\t13 obs. of 4 variables: $ SourceFile : chr “/Users/…/finish.png” “/Users/…/IMG_20190623_091723989_HDR~2.jpg” “/Users/…/IMG_20190623_095219047_HDR~2.jpg” “/Users/…/IMG_20190623_101644766~2.jpg” … $ FileName : chr “finish.png” “IMG_20190623_091723989_HDR~2.jpg” “IMG_20190623_095219047_HDR~2.jpg” “IMG_20190623_101644766~2.jpg” … $ GPSLatitude : num NA 43.5 43.5 43.5 43.5 … $ GPSLongitude: num NA -80.6 -80.6 -80.6 -80.6 … {% endhighlight %}\nBeberapa file tanpa titik koordinat (GPSLatitude dan GPSLongitude NA). Untuk memilih hanya foto-foto yang memuat informasi koordinat, jalankan perintah berikut:\n{% highlight r %} picture_point \u003c- picture_point[!is.na(picture_point$GPSLatitude), ] str(picture_point) {% endhighlight %}\n{% highlight text %}\nClasses ’tbl_df’, ’tbl’ and ‘data.frame’:\t10 obs. of 4 variables: $ SourceFile : chr “/Users/…/IMG_20190623_091723989_HDR~2.jpg” “/Users/…/IMG_20190623_095219047_HDR~2.jpg” “/Users/…/IMG_20190623_101644766~2.jpg” “/Users/…/IMG_20190623_102230650~2.jpg” … $ FileName : chr “IMG_20190623_091723989_HDR~2.jpg” “IMG_20190623_095219047_HDR~2.jpg” “IMG_20190623_101644766~2.jpg” “IMG_20190623_102230650~2.jpg” … $ GPSLatitude : num 43.5 43.5 43.5 43.5 43.5 … $ GPSLongitude: num -80.6 -80.6 -80.6 -80.6 -80.6 … {% endhighlight %}\nMembuat peta! Saatnye manampilkan rute lari beserta foto dalam peta menggunakan leaflet. Berikut tahapannya:\nLangkah #1. Proses membuat peta dengan leaflet diinsiasi dengan fungsi leaflet. Dengan menjalankan fungsi ini, kita sedang menyiapkan sebuah “leyer” kosong yang di atasnya akan kita “tumpuk” layer-layer, seperti peta dasar (base map), polyline, polygon, marker, dan lain-lain.\n{% highlight r %} m \u003c- leaflet() {% endhighlight %}\nLangkah #2. Tambahkan peta dasar (basemap) pada layer kosong m dengan fungsi addTiles. Secara default, peta dasar yang digunakan adalah OpenStreetMap.\n{% highlight r %} m \u003c- m %\u003e% addTiles(layerId = “Road”, group = “Road”) {% endhighlight %}\nMeskipun opsional, sangat disarankan untuk menggunakan parameter layerId dan group. layerId berfungsi untuk menandai sebuah layer atau objek pada peta. Satu atau beberapa layer bisa dikelompokkan dalam sebuah group. Salah satu kegunaan dari layerId maupun group adalah memudahkan kita dalam modifikas sebuah layer atau grup layer. Sebagai contoh untuk menghapus layer basemap:\n{% highlight r %} m %\u003e% removeTiles(“Road”) {% endhighlight %}\nOperator %\u003e% diadopsi dari package magrittr, bertindak sebagai forward pipe operator.\nPerintah\n{% highlight r %} m \u003c- addTiles(m) {% endhighlight %}\ndapat ditulis dengan\n{% highlight r %} m \u003c- m %\u003e% addTiles {% endhighlight %}\nAtau secara umum\n{% highlight r %} y \u003c- h(g(f(x))) {% endhighlight %}\nsama dengan\n{% highlight r %} y \u003c- x %\u003e% f %\u003e% g %\u003e% h {% endhighlight %}\nKembali ke leaflet. Kita sudah mempunya peta dangan satu layer peta dasar dalam objek m, yang dapat ditampilkan dengan cara memanggil objek tersebut.\n{% highlight r %} m {% endhighlight %}\n{% include iframe3x1.html url=“https://rstudio-pubs-static.s3.amazonaws.com/510723_a13198697f414e4fad744ff18d5a5d67.html\" %}\nGunakan tombol (+) dan (-) untuk zoom-in atau zoom-out peta.\nLangkah #3. Selain menggunakan OpenStreetMap, kita dapat menambahkan basemap dari provider lain dengan fungsi addProviderTiles. Misalnya:\nPeta dark-mode dari CartoDB\n{% highlight r %} m \u003c- m %\u003e% addProviderTiles(“CartoDB.DarkMatter”, layerId = “Road Dark”, group = “Road Dark”) {% endhighlight %}\n{% include iframe3x1.html url=“https://rstudio-pubs-static.s3.amazonaws.com/510724_26f3934f95c449318d8ab42fb4d3ccf1.html\" %}\nAtau, citra satelit dari ESRI\n{% highlight r %} m \u003c- m %\u003e% addProviderTiles(“Esri.WorldImagery”, layerId = “Satellite”, group = “Satellite”) {% endhighlight %}\n{% include iframe3x1.html url=“https://rstudio-pubs-static.s3.amazonaws.com/510725_6093f96266b74541b829ef672df5cd8c.html\" %}\nDaftar provider yang tersedia dapat dilihat di sini.\nLangkah #4. Menampilkan titik-titik koordinat rute (yang sudah kita siapkan dalam data-frame route) pada peta. Rute merupakan objek polylines, dapat ditampilkan dengan menggunakan fungsi addPolylines:\n{% highlight r %} m \u003c- m %\u003e% addPolylines(data=route, lng = ~lon, lat = ~lat, layerId = “Running Route”, group = “Running Route”) {% endhighlight %}\n{% include iframe.html url=“https://rstudio-pubs-static.s3.amazonaws.com/510726_f824523f38d54170bbda99318fb146c6.html\" %}\nKita dapat memasukkan parameter tambahan untuk mengatur tampilan, misalnya untuk mengubah warna. Namun, hapus dulu layer sebelumnya!.\n{% highlight r %} m %\u003e% removeShape(“Running Route”) {% endhighlight %}\n{% highlight r %} m \u003c- m %\u003e% addPolylines(data=route, lng = ~lon, lat = ~lat, color = “red”, opacity = 1, layerId = “Running Route”, group = “Running Route”) {% endhighlight %}\n{% include iframe.html url=“https://rstudio-pubs-static.s3.amazonaws.com/510727_aedaaad2c3794caf8cf70264a60f21a3.html\" %}\nLangkah #5. Rute sudah tergambar dalam peta. Selanjutnya adalah membuat markers atau penanda. Kita mulai dengan markers titik start dan finish. Sebelum membuat markers, tentukan dulu titik koordinatnya.\nTitik start : baris pertama pada data-frame route {% highlight r %} start_point \u003c- head(route, 1) {% endhighlight %}\nTitik finish : baris terakhir pada data-frame route {% highlight r %} finish_point \u003c- tail(route, 1) {% endhighlight %}\nMenambahkan markers pada peta dapat dilakukan dengan menggunakan fungsi addMarkers.\n{% highlight r %} m \u003c- m %\u003e% addMarkers(data = start_point, lng=~lon, lat=~lat, popup = “Start” layerId = “start”, group = “Start/Finish”) {% endhighlight %}\n{% include iframe.html url=“https://rstudio-pubs-static.s3.amazonaws.com/511095_857484b1752b4707abefaefe0c6db128.html\" %}\nKita juga bisa mengubah marker icon dengan icon sesuai keinginan kita, misalnya dengan gambar start.jpg.\nNote: Seluruh file gambar yang akan digunakan saya simpan di Github directory\nhttps://raw.githubusercontent.com/nurandi/nurandi.github.io/master/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet Agar penulisan URL dari tiap gambar yang digunakan menjadi lebih sederhana, saya membuat fungsi img_url berikut\n{% highlight r %} img_url \u003c- function(file_name){ file.path(“https://raw.githubusercontent.com/nurandi/nurandi.github.io/master/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet\", file_name) } {% endhighlight %}\nSebelum gambar custom bisa digunakan sebagai marker icon, maka harus dibuat dulu dengan perintah makeIcon\n{% highlight r %} start_icon \u003c- makeIcon( iconAnchorX = 12, iconAnchorY = 12, iconUrl = img_url(“start.png”) ) {% endhighlight %}\nBarulah kita ganti default icon dengan custom icon\n{% highlight r %} m %\u003e% removeMarker(“start”) {% endhighlight %}\n{% highlight r %} m \u003c- m %\u003e% addMarkers(data = start_point, lng=~lon, lat=~lat, popup = “Start”, icon = start_icon, layerId = “start”, group = “Start/Finish”) {% endhighlight %}\n{% include iframe.html url=“http://rstudio-pubs-static.s3.amazonaws.com/556571_02992237a3e34f94a579f8fcdb503ee8.html\" %}\nCara yang sama bisa kita lakukan untuk menambahkan marker titik finish\n{% highlight r %} finish_icon \u003c- makeIcon( iconAnchorX = 12, iconAnchorY = 12, iconUrl = img_url(“finish.png”) )\nm \u003c- m %\u003e% addMarkers(data = finish_point, lng=~lon, lat=~lat, popup = “Finish”, icon = finish_icon, layerId = “finish”, group = “Start/Finish”) {% endhighlight %}\n{% include iframe.html url=“https://rstudio-pubs-static.s3.amazonaws.com/556570_6ed6450fa9a34c9c89bc731f7086e55c.html\" %}\nLangkah #6. Membuat markers untuk foto pada titik koordinatnya. Caranya mirip dengan Langkah #5. Yang membedakan, jika sebelumnya pop up berupa teks Start dan Finish maka di sini kita gunakan HTML untuk menampilkan foto.\nBuat icon\n{% highlight r %} picture_icon \u003c- makeIcon( iconAnchorX = 12, iconAnchorY = 12, iconUrl = img_url(“picture.png”) ) {% endhighlight %}\nData titik koordinat foto di simpan dalam data frame picture_point. Kita buat kolom popup berupa kode HTML untuk menampilkan foto.\n{% highlight r %} picture_point$popup \u003c- paste(’’, sep=’’) {% endhighlight %}\nTampilkan markers\n{% highlight r %} m \u003c- m %\u003e% addMarkers(data = picture_point, lng=~GPSLongitude, lat=~GPSLatitude, popup = ~popup, icon = picture_icon, options = popupOptions(maxWidth= “auto”,keepInView = TRUE), group =‘Pictures’) {% endhighlight %}\n{% include iframe.html url=“http://rstudio-pubs-static.s3.amazonaws.com/556572_15b456405a114aaead4d0e7aed54c121.html\" %}\nJika salah satu marker kita klik, foto akan muncul pada pop up.\nLangkah #7. Atau langkah terakhir adalah membuat layer control, agar user dapat:\nmemilih basemap apa yang akan digunakan menampilkan atau menyebunyikan rute, markers start/finish, maupun markers foto. Fungsi yang digunakan adalah addLayersControl\n{% highlight r %} m \u003c- m %\u003e% addLayersControl(position = ’topright’, baseGroups = c(“Road”, “Road Dark”, “Satellite”), overlayGroups = c(“Running Route”, “Start/Finish”, “Pictures”), options = layersControlOptions(collapsed = FALSE)) {% endhighlight %}\n{% include iframe.html url=“http://rstudio-pubs-static.s3.amazonaws.com/556573_0682aa10717340f7a09a36fa09a3da16.html\" %}\nSelesai!\nJika digabungkan, maka inilah kode lengkap untuk menampilkan rute lari beserta foto dengan menggunakan R dan leaflet:\n{% highlight r %}\ninstall package(s) yg diperlukan install.packages(c(“plotKML”, “exifr”, “leaflet”))\nload package(s) library(plotKML) library(exifr) library(leaflet)\nmembaca rute dari file GPX gpx_file \u003c- “Light_Trail_at_Laurel_Creek.gpx” route \u003c- readGPX(gpx_file) route \u003c- route$tracks[[1]][[1]]\ntentukan titik start/finish start_point \u003c- head(route, 1) finish_point \u003c- tail(route, 1)\nmembaca exif dari foto picture_files \u003c- list.files(“img”, full.names = TRUE) picture_point \u003c- read_exif(picture_files, tags = c(“FileName”, “GPSLatitude”, “GPSLongitude”), quiet = TRUE)\npilih foto yang mempunyai informasi koordinat picture_point \u003c- picture_point[!is.na(picture_point$GPSLatitude), ]\nmembuat icon untuk titik start/finish/picture img_url \u003c- function(file_name){ file.path(“https://raw.githubusercontent.com/nurandi/nurandi.github.io/master/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet\", file_name) }\nstart_icon \u003c- makeIcon( iconAnchorX = 12, iconAnchorY = 12, iconUrl = img_url(“start.png”) )\nfinish_icon \u003c- makeIcon( iconAnchorX = 12, iconAnchorY = 12, iconUrl = img_url(“finish.png”) )\npicture_icon \u003c- makeIcon( iconAnchorX = 12, iconAnchorY = 12, iconUrl = img_url(“picture.png”) )\nmembuat kode HTML untuk pop-up picture picture_point$popup \u003c- paste(’’, sep=’’)\nMEMBUAT PETA inisiasi peta dengan leaflet m \u003c- leaflet() %\u003e%\n# base map default\raddTiles(layerId = \"Road\",\rgroup = \"Road\") %\u003e%\r# base map CartoDB\raddProviderTiles(\"CartoDB.DarkMatter\", layerId = \"Road Dark\",\rgroup = \"Road Dark\") %\u003e%\r# basemap satellite\raddProviderTiles(\"Esri.WorldImagery\", layerId = \"Satellite\",\rgroup = \"Satellite\") %\u003e%\r# route\raddPolylines(data=route, lng = ~lon, lat = ~lat, color = \"red\", opacity = 1,\rlayerId = \"Running Route\",\rgroup = \"Running Route\") %\u003e%\r# start marker\raddMarkers(data = start_point, lng=~lon, lat=~lat,\rpopup = \"Start\",\ricon = start_icon,\rlayerId = \"start\",\rgroup = \"Start/Finish\") %\u003e%\r# finish marker\raddMarkers(data = finish_point, lng=~lon, lat=~lat,\rpopup = \"Finish\",\ricon = finish_icon,\rlayerId = \"finish\",\rgroup = \"Start/Finish\") %\u003e%\r# picture marker dan pop-up\raddMarkers(data = picture_point, lng=~GPSLongitude, lat=~GPSLatitude,\rpopup = ~popup,\ricon = picture_icon,\roptions = popupOptions(maxWidth= \"auto\",keepInView = TRUE),\rgroup ='Pictures') %\u003e%\r# layer control\raddLayersControl(position = 'topright',\rbaseGroups = c(\"Road\", \"Road Dark\", \"Satellite\"),\roverlayGroups = c(\"Running Route\", \"Start/Finish\", \"Pictures\"),\roptions = layersControlOptions(collapsed = FALSE)) selesai m {% endhighlight %}\nSelamat mencoba. Semoga bermanfaat :)\n",
+  "wordCount" : "2284",
+  "inLanguage": "en",
+  "datePublished": "0001-01-01T00:00:00Z",
+  "dateModified": "0001-01-01T00:00:00Z",
+  "author":{
+    "@type": "Person",
+    "name": "Nur Andi Setiabudi"
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "/blog/visualisasi-rute-lari-dengan-r-dan-leaflet/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "PaperMod",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+
+<body class="" id="top">
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.body.classList.add('dark');
+    } else if (localStorage.getItem("pref-theme") === "light") {
+        document.body.classList.remove('dark')
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.body.classList.add('dark');
+    }
+
+</script>
+
+<header class="header">
+    <nav class="nav">
+        <div class="logo">
+            <a href="/" accesskey="h" title="PaperMod (Alt + H)">PaperMod</a>
+            <div class="logo-switches">
+                <button id="theme-toggle" accesskey="t" title="(Alt + T)">
+                    <svg id="moon" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg id="sun" xmlns="http://www.w3.org/2000/svg" width="24" height="18" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button>
+                <ul class="lang-switch"><li>|</li>
+                    <li>
+                        <a href="/fr/" title="French"
+                            aria-label=":fr:">🇫🇷</a>
+                    </li>
+                    <li>
+                        <a href="/fa/" title="Fa"
+                            aria-label="Fa">Fa</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <ul id="menu">
+            <li>
+                <a href="/archives" title="Archive">
+                    <span>Archive</span>
+                </a>
+            </li>
+            <li>
+                <a href="/search/" title="Search">
+                    <span>Search</span>
+                </a>
+            </li>
+            <li>
+                <a href="/tags/" title="Tags">
+                    <span>Tags</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://discord.gg/ahpmTvhVmp" title="Discord">
+                    <span>Discord</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+            <li>
+                <a href="https://github.com/adityatelange/hugo-PaperMod/wiki/" title="WiKi">
+                    <span>WiKi</span>&nbsp;
+                    <svg fill="none" shape-rendering="geometricPrecision" stroke="currentColor" stroke-linecap="round"
+                        stroke-linejoin="round" stroke-width="2.5" viewBox="0 0 24 24" height="12" width="12">
+                        <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"></path>
+                        <path d="M15 3h6v6"></path>
+                        <path d="M10 14L21 3"></path>
+                    </svg>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <div class="breadcrumbs"><a href="/">Home</a>&nbsp;»&nbsp;<a href="/blog/">Blogs</a></div>
+    <h1 class="post-title">
+      Visualisasi Rute Lari dengan R dan Leaflet
+    </h1>
+    <div class="post-meta">11 min&nbsp;·&nbsp;Nur Andi Setiabudi&nbsp;|&nbsp;<a href="https://github.com/adityatelange/hugo-PaperMod/tree/exampleSite/content/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet/index.md" rel="noopener noreferrer" target="_blank">Suggest Changes</a>
+
+</div>
+  </header> <div class="toc">
+    <details >
+        <summary accesskey="c" title="(Alt + C)">
+            <span class="details">Table of Contents</span>
+        </summary>
+
+        <div class="inner"><ul>
+                <li>
+                    <a href="#data-yang-diperlukan" aria-label="Data yang diperlukan">Data yang diperlukan</a></li>
+                <li>
+                    <a href="#packages" aria-label="Package(s)">Package(s)</a></li>
+                <li>
+                    <a href="#lets-map-your-running-route" aria-label="Let&amp;rsquo;s map your running route!">Let&rsquo;s map your running route!</a><ul>
+                        
+                <li>
+                    <a href="#membaca-file-gpx-untuk-mendapatkan-titik-titik-koordinat-dari-rute" aria-label="Membaca file GPX untuk mendapatkan titik-titik koordinat dari rute">Membaca file GPX untuk mendapatkan titik-titik koordinat dari rute</a></li>
+                <li>
+                    <a href="#list-of-5" aria-label="List of 5">List of 5</a></li>
+                <li>
+                    <a href="#-metadata--null" aria-label="$ metadata : NULL">$ metadata : NULL</a></li>
+                <li>
+                    <a href="#-bounds----null" aria-label="$ bounds   : NULL">$ bounds   : NULL</a></li>
+                <li>
+                    <a href="#-waypoints-null" aria-label="$ waypoints: NULL">$ waypoints: NULL</a></li>
+                <li>
+                    <a href="#-tracks---list-of-1" aria-label="$ tracks   :List of 1">$ tracks   :List of 1</a></li>
+                <li>
+                    <a href="#-list-of-1" aria-label="..$ :List of 1">..$ :List of 1</a></li>
+                <li>
+                    <a href="#--light-trail-at-laurel-creek-dataframe7995-obs-of--5-variables" aria-label=".. ..$ Light Trail at Laurel Creek 🏞️:&amp;lsquo;data.frame&amp;rsquo;:	7995 obs. of  5 variables:">.. ..$ Light Trail at Laurel Creek 🏞️:&lsquo;data.frame&rsquo;:	7995 obs. of  5 variables:</a></li>
+                <li>
+                    <a href="#---lon--------num-17995--805--805--805--805--805-" aria-label=".. .. ..$ lon       : num [1:7995] -80.5 -80.5 -80.5 -80.5 -80.5 &amp;hellip;">.. .. ..$ lon       : num [1:7995] -80.5 -80.5 -80.5 -80.5 -80.5 &hellip;</a></li>
+                <li>
+                    <a href="#---lat--------num-17995-435-435-435-435-435-" aria-label=".. .. ..$ lat       : num [1:7995] 43.5 43.5 43.5 43.5 43.5 &amp;hellip;">.. .. ..$ lat       : num [1:7995] 43.5 43.5 43.5 43.5 43.5 &hellip;</a></li>
+                <li>
+                    <a href="#---ele--------chr-17995-3353-3353-3352-3351-" aria-label=".. .. ..$ ele       : chr [1:7995] &amp;ldquo;335.3&amp;rdquo; &amp;ldquo;335.3&amp;rdquo; &amp;ldquo;335.2&amp;rdquo; &amp;ldquo;335.1&amp;rdquo; &amp;hellip;">.. .. ..$ ele       : chr [1:7995] &ldquo;335.3&rdquo; &ldquo;335.3&rdquo; &ldquo;335.2&rdquo; &ldquo;335.1&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#---time-------chr-17995-2019-06-23t130804z-2019-06-23t130805z-2019-06-23t130806z-2019-06-23t130807z-" aria-label=".. .. ..$ time      : chr [1:7995] &amp;ldquo;2019-06-23T13:08:04Z&amp;rdquo; &amp;ldquo;2019-06-23T13:08:05Z&amp;rdquo; &amp;ldquo;2019-06-23T13:08:06Z&amp;rdquo; &amp;ldquo;2019-06-23T13:08:07Z&amp;rdquo; &amp;hellip;">.. .. ..$ time      : chr [1:7995] &ldquo;2019-06-23T13:08:04Z&rdquo; &ldquo;2019-06-23T13:08:05Z&rdquo; &ldquo;2019-06-23T13:08:06Z&rdquo; &ldquo;2019-06-23T13:08:07Z&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#---extensions-chr-17995-14258-1420-1420-1410-" aria-label=".. .. ..$ extensions: chr [1:7995] &amp;ldquo;14258&amp;rdquo; &amp;ldquo;1420&amp;rdquo; &amp;ldquo;1420&amp;rdquo; &amp;ldquo;1410&amp;rdquo; &amp;hellip;">.. .. ..$ extensions: chr [1:7995] &ldquo;14258&rdquo; &ldquo;1420&rdquo; &ldquo;1420&rdquo; &ldquo;1410&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#-routes----null" aria-label="$ routes   : NULL">$ routes   : NULL</a></li>
+                <li>
+                    <a href="#dataframe7995-obs-of--5-variables" aria-label="&amp;lsquo;data.frame&amp;rsquo;:	7995 obs. of  5 variables:">&lsquo;data.frame&rsquo;:	7995 obs. of  5 variables:</a></li>
+                <li>
+                    <a href="#-lon--------num---805--805--805--805--805-" aria-label="$ lon       : num  -80.5 -80.5 -80.5 -80.5 -80.5 &amp;hellip;">$ lon       : num  -80.5 -80.5 -80.5 -80.5 -80.5 &hellip;</a></li>
+                <li>
+                    <a href="#-lat--------num--435-435-435-435-435-" aria-label="$ lat       : num  43.5 43.5 43.5 43.5 43.5 &amp;hellip;">$ lat       : num  43.5 43.5 43.5 43.5 43.5 &hellip;</a></li>
+                <li>
+                    <a href="#-ele--------chr--3353-3353-3352-3351-" aria-label="$ ele       : chr  &amp;ldquo;335.3&amp;rdquo; &amp;ldquo;335.3&amp;rdquo; &amp;ldquo;335.2&amp;rdquo; &amp;ldquo;335.1&amp;rdquo; &amp;hellip;">$ ele       : chr  &ldquo;335.3&rdquo; &ldquo;335.3&rdquo; &ldquo;335.2&rdquo; &ldquo;335.1&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#-time-------chr--2019-06-23t130804z-2019-06-23t130805z-2019-06-23t130806z-2019-06-23t130807z-" aria-label="$ time      : chr  &amp;ldquo;2019-06-23T13:08:04Z&amp;rdquo; &amp;ldquo;2019-06-23T13:08:05Z&amp;rdquo; &amp;ldquo;2019-06-23T13:08:06Z&amp;rdquo; &amp;ldquo;2019-06-23T13:08:07Z&amp;rdquo; &amp;hellip;">$ time      : chr  &ldquo;2019-06-23T13:08:04Z&rdquo; &ldquo;2019-06-23T13:08:05Z&rdquo; &ldquo;2019-06-23T13:08:06Z&rdquo; &ldquo;2019-06-23T13:08:07Z&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#-extensions-chr--14258-1420-1420-1410-" aria-label="$ extensions: chr  &amp;ldquo;14258&amp;rdquo; &amp;ldquo;1420&amp;rdquo; &amp;ldquo;1420&amp;rdquo; &amp;ldquo;1410&amp;rdquo; &amp;hellip;">$ extensions: chr  &ldquo;14258&rdquo; &ldquo;1420&rdquo; &ldquo;1420&rdquo; &ldquo;1410&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#membaca-exif-dari-foto-untuk-mendapatkan-titik-koordinatnya" aria-label="Membaca exif dari foto untuk mendapatkan titik koordinatnya">Membaca <em>exif</em> dari foto untuk mendapatkan titik koordinatnya</a></li>
+                <li>
+                    <a href="#classes-tbl_df-tbl-and-dataframe13-obs-of--4-variables" aria-label="Classes &amp;rsquo;tbl_df&amp;rsquo;, &amp;rsquo;tbl&amp;rsquo; and &amp;lsquo;data.frame&amp;rsquo;:	13 obs. of  4 variables:">Classes &rsquo;tbl_df&rsquo;, &rsquo;tbl&rsquo; and &lsquo;data.frame&rsquo;:	13 obs. of  4 variables:</a></li>
+                <li>
+                    <a href="#-sourcefile---chr--usersfinishpng-usersimg_20190623_091723989_hdr2jpg-usersimg_20190623_095219047_hdr2jpg-usersimg_20190623_1016447662jpg-" aria-label="$ SourceFile  : chr  &amp;ldquo;/Users/&amp;hellip;/finish.png&amp;rdquo; &amp;ldquo;/Users/&amp;hellip;/IMG_20190623_091723989_HDR~2.jpg&amp;rdquo; &amp;ldquo;/Users/&amp;hellip;/IMG_20190623_095219047_HDR~2.jpg&amp;rdquo; &amp;ldquo;/Users/&amp;hellip;/IMG_20190623_101644766~2.jpg&amp;rdquo; &amp;hellip;">$ SourceFile  : chr  &ldquo;/Users/&hellip;/finish.png&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_091723989_HDR~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_095219047_HDR~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_101644766~2.jpg&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#-filename-----chr--finishpng-img_20190623_091723989_hdr2jpg-img_20190623_095219047_hdr2jpg-img_20190623_1016447662jpg-" aria-label="$ FileName    : chr  &amp;ldquo;finish.png&amp;rdquo; &amp;ldquo;IMG_20190623_091723989_HDR~2.jpg&amp;rdquo; &amp;ldquo;IMG_20190623_095219047_HDR~2.jpg&amp;rdquo; &amp;ldquo;IMG_20190623_101644766~2.jpg&amp;rdquo; &amp;hellip;">$ FileName    : chr  &ldquo;finish.png&rdquo; &ldquo;IMG_20190623_091723989_HDR~2.jpg&rdquo; &ldquo;IMG_20190623_095219047_HDR~2.jpg&rdquo; &ldquo;IMG_20190623_101644766~2.jpg&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#-gpslatitude--num--na-435-435-435-435-" aria-label="$ GPSLatitude : num  NA 43.5 43.5 43.5 43.5 &amp;hellip;">$ GPSLatitude : num  NA 43.5 43.5 43.5 43.5 &hellip;</a></li>
+                <li>
+                    <a href="#-gpslongitude-num--na--806--806--806--806-" aria-label="$ GPSLongitude: num  NA -80.6 -80.6 -80.6 -80.6 &amp;hellip;">$ GPSLongitude: num  NA -80.6 -80.6 -80.6 -80.6 &hellip;</a></li>
+                <li>
+                    <a href="#classes-tbl_df-tbl-and-dataframe10-obs-of--4-variables" aria-label="Classes &amp;rsquo;tbl_df&amp;rsquo;, &amp;rsquo;tbl&amp;rsquo; and &amp;lsquo;data.frame&amp;rsquo;:	10 obs. of  4 variables:">Classes &rsquo;tbl_df&rsquo;, &rsquo;tbl&rsquo; and &lsquo;data.frame&rsquo;:	10 obs. of  4 variables:</a></li>
+                <li>
+                    <a href="#-sourcefile---chr--usersimg_20190623_091723989_hdr2jpg-usersimg_20190623_095219047_hdr2jpg-usersimg_20190623_1016447662jpg-usersimg_20190623_1022306502jpg-" aria-label="$ SourceFile  : chr  &amp;ldquo;/Users/&amp;hellip;/IMG_20190623_091723989_HDR~2.jpg&amp;rdquo; &amp;ldquo;/Users/&amp;hellip;/IMG_20190623_095219047_HDR~2.jpg&amp;rdquo; &amp;ldquo;/Users/&amp;hellip;/IMG_20190623_101644766~2.jpg&amp;rdquo; &amp;ldquo;/Users/&amp;hellip;/IMG_20190623_102230650~2.jpg&amp;rdquo; &amp;hellip;">$ SourceFile  : chr  &ldquo;/Users/&hellip;/IMG_20190623_091723989_HDR~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_095219047_HDR~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_101644766~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_102230650~2.jpg&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#-filename-----chr--img_20190623_091723989_hdr2jpg-img_20190623_095219047_hdr2jpg-img_20190623_1016447662jpg-img_20190623_1022306502jpg-" aria-label="$ FileName    : chr  &amp;ldquo;IMG_20190623_091723989_HDR~2.jpg&amp;rdquo; &amp;ldquo;IMG_20190623_095219047_HDR~2.jpg&amp;rdquo; &amp;ldquo;IMG_20190623_101644766~2.jpg&amp;rdquo; &amp;ldquo;IMG_20190623_102230650~2.jpg&amp;rdquo; &amp;hellip;">$ FileName    : chr  &ldquo;IMG_20190623_091723989_HDR~2.jpg&rdquo; &ldquo;IMG_20190623_095219047_HDR~2.jpg&rdquo; &ldquo;IMG_20190623_101644766~2.jpg&rdquo; &ldquo;IMG_20190623_102230650~2.jpg&rdquo; &hellip;</a></li>
+                <li>
+                    <a href="#-gpslatitude--num--435-435-435-435-435-" aria-label="$ GPSLatitude : num  43.5 43.5 43.5 43.5 43.5 &amp;hellip;">$ GPSLatitude : num  43.5 43.5 43.5 43.5 43.5 &hellip;</a></li>
+                <li>
+                    <a href="#-gpslongitude-num---806--806--806--806--806-" aria-label="$ GPSLongitude: num  -80.6 -80.6 -80.6 -80.6 -80.6 &amp;hellip;">$ GPSLongitude: num  -80.6 -80.6 -80.6 -80.6 -80.6 &hellip;</a></li>
+                <li>
+                    <a href="#membuat-peta" aria-label="Membuat peta!">Membuat peta!</a></li></ul>
+                </li>
+                <li>
+                    <a href="#install-packages-yg-diperlukan" aria-label="install package(s) yg diperlukan">install package(s) yg diperlukan</a></li>
+                <li>
+                    <a href="#load-packages" aria-label="load package(s)">load package(s)</a></li>
+                <li>
+                    <a href="#membaca-rute-dari-file-gpx" aria-label="membaca rute dari file GPX">membaca rute dari file GPX</a></li>
+                <li>
+                    <a href="#tentukan-titik-startfinish" aria-label="tentukan titik start/finish">tentukan titik start/finish</a></li>
+                <li>
+                    <a href="#membaca-exif-dari-foto" aria-label="membaca exif dari foto">membaca exif dari foto</a></li>
+                <li>
+                    <a href="#pilih-foto-yang-mempunyai-informasi-koordinat" aria-label="pilih foto yang mempunyai informasi koordinat">pilih foto yang mempunyai informasi koordinat</a></li>
+                <li>
+                    <a href="#membuat-icon-untuk-titik-startfinishpicture" aria-label="membuat icon untuk titik start/finish/picture">membuat icon untuk titik start/finish/picture</a></li>
+                <li>
+                    <a href="#membuat-kode-html-untuk-pop-up-picture" aria-label="membuat kode HTML untuk pop-up picture">membuat kode HTML untuk pop-up picture</a></li>
+                <li>
+                    <a href="#membuat-peta-1" aria-label="MEMBUAT PETA">MEMBUAT PETA</a></li>
+                <li>
+                    <a href="#inisiasi-peta-dengan-leaflet" aria-label="inisiasi peta dengan leaflet">inisiasi peta dengan leaflet</a></li>
+                <li>
+                    <a href="#selesai" aria-label="selesai">selesai</a>
+                </li>
+            </ul>
+        </div>
+    </details>
+</div>
+
+  <div class="post-content"><p>Beberapa waktu lalu (tepatnya tiga tahun lalu :D) saya menulis artikel tentang bagaimana <a href="https://www.nurandi.id/blog/membuat-peta-dengan-r-dan-leaflet/">memetakan twit dengan menggunakan Leaflet</a>. Kali ini, saya akan memetakan rute lari yang direkam  perangkat GPS (jam tangan ber-GPS, <em>smartphone</em>, dan lain-lain) dengan memanfaatkan <em>tools</em> yang sama, yaitu <strong>R</strong> dan dan <em>package</em> <strong>leaflet</strong>. Jika belum familiar dengan Leaflet, ada baiknya membaca <a href="https://rstudio.github.io/leaflet/">artikel ini</a>. <em>Bocoran</em> singkatnya, Leaflet adalah salah satu <em>library</em> JavaScript paling populer untuk membuat peta interaktif (bukan peta statis). <em>Package</em> <strong>leaflet</strong> dikembangkan oleh RStudio untuk memudahkan pembuatan peta melalui R, tanpa harus menulis kode JavaScript.</p>
+<h1 id="data-yang-diperlukan">Data yang diperlukan<a hidden class="anchor" aria-hidden="true" href="#data-yang-diperlukan">#</a></h1>
+<p>Tentu saja yang paling utama adalah <strong>data</strong> <em>tracking</em>/rute (lari, bersepeda, dan lain-lain) dalam bentuk titik-titik koordinat <em>(latitide-longitude)</em>. Data tersebut direkam dengan perangkat atau aplikasi GPS dan biasanya disimpan dalam format GPX <em>(GPS exchange format),</em> TCX <em>(training center XML),</em> FIT <em>(flexible and interoperable data transfer),</em> atau format lainnya. Contoh pada artikel ini akan menggunakan data berformat GPX. File GPX dapat diperoleh dari aplikasi <em>sport tracking</em> seperti <a href="https://connect.garmin.com">Garmin Connect</a>, <a href="https://www.endomondo.com/">Endomondo</a> dan <a href="https://www.strava.com">Strava</a>.</p>
+<ul>
+<li>Garmin Connect (web) : klik <strong>Activities</strong> → <strong>All Activities</strong> → pilih salah satu <em>activity</em> → simbol <em>gear</em> ⚙ → <strong>Export to GPX</strong>.</li>
+<li>Endomondo (web) : klik <strong>Training</strong> → <strong>Workouts</strong> atau <strong>History</strong> → pilih salah satu <em>workout</em> → simbol ⋁ → <strong>Export</strong> → pilih <strong>GPX Format</strong> → <strong>Export</strong>.</li>
+<li>Strava (web) : klik <strong>Training Log</strong> atau <strong>My Activities</strong> → pilih salah satu <em>activity</em> → simbol <em>three dots</em> ⋯ → <strong>Export GPX</strong>.</li>
+</ul>
+<p>Tidak pernah menggunakan aplikasi <em>tracking</em> atau tidak punya file GPX? Silakan <em>download</em> punya saya di <a href="https://drive.google.com/drive/folders/16d9k_FTsn8Rg5eVGgDbBVWD8vpuvSOKg?usp=sharing">sini</a>.</p>
+<p>{% include base_path %}</p>
+<p>{% capture fig_img %}
+![Strava-map]({{ base_path }}/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet/strava-map.png)
+{% endcapture %}</p>
+<figure>
+{{ fig_img | markdownify | remove: "<p>" | remove: "</p>" }}
+<span class="caption" markdown="1">Peta rute lari pada Strava beserta foto sepanjang rute yang ditampilkan dalam bentuk *pop-up*. [Klik untuk lihat detail.](https://www.strava.com/activities/2474503416)</span>
+</figure> 
+<p><strong>Nice to have:</strong> Jika saat lari sempat ambil foto (menggunakan <em>smartphone</em> atau kamera digital dengan <em>location-enabled</em>), kita bisa memasangnya pada peta dalam bentuk <em>pop-up</em> (lihat screen-shot Strava di atas). Ini akan saya bahas pada artikel ini. Silakan ambil foto-fotonya di <a href="(https://drive.google.com/drive/folders/16d9k_FTsn8Rg5eVGgDbBVWD8vpuvSOKg?usp=sharing)">sini</a> jika menggunakan file GPX saya.</p>
+<h1 id="packages">Package(s)<a hidden class="anchor" aria-hidden="true" href="#packages">#</a></h1>
+<p>Ada tiga <em>packages</em> yang akan digunakan, yaitu:</p>
+<ul>
+<li><strong>plotKML</strong> untuk membaca file GPX. Alternatif lain adalah <em>package</em> <strong>XML</strong> dan <strong>maptools</strong>.</li>
+<li><strong>exifr</strong> untuk membaca <em>exif (exchangeable image format)</em> atau metadata dari <em>image</em>, dalam hal ini kita akan membaca titik koordinat <em>(latitude-longitude)</em> di mana sebuah foto diambil.</li>
+<li><strong>leaflet</strong> untuk membuat peta.</li>
+</ul>
+<p>Jika <em>package(s)</em> tersebut belum terinstal pada R, silakan instal terlebih dahulu dengan perintah</p>
+<p>{% highlight r %}
+install.packages(c(&ldquo;plotKML&rdquo;, &ldquo;exifr&rdquo;, &ldquo;leaflet&rdquo;))
+{% endhighlight %}</p>
+<p>Khusus <strong>leaflet</strong>, bisa juga instal versi <em>development</em>-nya dari <a href="https://github.com/rstudio/leaflet">Github</a>. <strong>exifr</strong> berjalan dengan di atas <strong>Perl</strong>. Silakan instal <a href="https://www.perl.org/get.html">salah satu aplikasi Perl</a> agar <strong>exifr</strong> dapat berfungsi sebagaimana mestinya.</p>
+<p>{% highlight r %}
+if (!require(&ldquo;devtools&rdquo;)) install.packages(&ldquo;devtools&rdquo;)
+devtools::install_github(&ldquo;rstudio/leaflet&rdquo;)
+{% endhighlight %}</p>
+<p>Setelah itu, <em>load</em> semua <em>packages</em>.</p>
+<p>{% highlight r %}
+library(plotKML)
+library(exifr)
+library(leaflet)
+{% endhighlight %}</p>
+<h1 id="lets-map-your-running-route">Let&rsquo;s map your running route!<a hidden class="anchor" aria-hidden="true" href="#lets-map-your-running-route">#</a></h1>
+<p>Data sudah tersedia. <em>Package(s)</em> yang diperlukan sudah terinstal. <em>Let&rsquo;s map your running route!</em> Ada beberapa tahapan sederhana yang harus dilakukan, yaitu membaca file GPX, membaca <em>exif</em> dari foto, dan membuat peta.</p>
+<h2 id="membaca-file-gpx-untuk-mendapatkan-titik-titik-koordinat-dari-rute">Membaca file GPX untuk mendapatkan titik-titik koordinat dari rute<a hidden class="anchor" aria-hidden="true" href="#membaca-file-gpx-untuk-mendapatkan-titik-titik-koordinat-dari-rute">#</a></h2>
+<p>File GPX dapat dibaca menggunakan fungsi <code>readGPX</code> yang tersedia pada <em>package</em> <strong>plotKML</strong>.</p>
+<p>{% highlight r %}
+gpx_file &lt;- &ldquo;Light_Trail_at_Laurel_Creek.gpx&rdquo;
+route &lt;- readGPX(gpx_file)
+{% endhighlight %}</p>
+<p>{% highlight r %}
+str(route)
+{% endhighlight %}</p>
+<p>{% highlight text %}</p>
+<h2 id="list-of-5">List of 5<a hidden class="anchor" aria-hidden="true" href="#list-of-5">#</a></h2>
+<h2 id="-metadata--null">$ metadata : NULL<a hidden class="anchor" aria-hidden="true" href="#-metadata--null">#</a></h2>
+<h2 id="-bounds----null">$ bounds   : NULL<a hidden class="anchor" aria-hidden="true" href="#-bounds----null">#</a></h2>
+<h2 id="-waypoints-null">$ waypoints: NULL<a hidden class="anchor" aria-hidden="true" href="#-waypoints-null">#</a></h2>
+<h2 id="-tracks---list-of-1">$ tracks   :List of 1<a hidden class="anchor" aria-hidden="true" href="#-tracks---list-of-1">#</a></h2>
+<h2 id="-list-of-1">..$ :List of 1<a hidden class="anchor" aria-hidden="true" href="#-list-of-1">#</a></h2>
+<h2 id="--light-trail-at-laurel-creek-dataframe7995-obs-of--5-variables">.. ..$ Light Trail at Laurel Creek 🏞️:&lsquo;data.frame&rsquo;:	7995 obs. of  5 variables:<a hidden class="anchor" aria-hidden="true" href="#--light-trail-at-laurel-creek-dataframe7995-obs-of--5-variables">#</a></h2>
+<h2 id="---lon--------num-17995--805--805--805--805--805-">.. .. ..$ lon       : num [1:7995] -80.5 -80.5 -80.5 -80.5 -80.5 &hellip;<a hidden class="anchor" aria-hidden="true" href="#---lon--------num-17995--805--805--805--805--805-">#</a></h2>
+<h2 id="---lat--------num-17995-435-435-435-435-435-">.. .. ..$ lat       : num [1:7995] 43.5 43.5 43.5 43.5 43.5 &hellip;<a hidden class="anchor" aria-hidden="true" href="#---lat--------num-17995-435-435-435-435-435-">#</a></h2>
+<h2 id="---ele--------chr-17995-3353-3353-3352-3351-">.. .. ..$ ele       : chr [1:7995] &ldquo;335.3&rdquo; &ldquo;335.3&rdquo; &ldquo;335.2&rdquo; &ldquo;335.1&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#---ele--------chr-17995-3353-3353-3352-3351-">#</a></h2>
+<h2 id="---time-------chr-17995-2019-06-23t130804z-2019-06-23t130805z-2019-06-23t130806z-2019-06-23t130807z-">.. .. ..$ time      : chr [1:7995] &ldquo;2019-06-23T13:08:04Z&rdquo; &ldquo;2019-06-23T13:08:05Z&rdquo; &ldquo;2019-06-23T13:08:06Z&rdquo; &ldquo;2019-06-23T13:08:07Z&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#---time-------chr-17995-2019-06-23t130804z-2019-06-23t130805z-2019-06-23t130806z-2019-06-23t130807z-">#</a></h2>
+<h2 id="---extensions-chr-17995-14258-1420-1420-1410-">.. .. ..$ extensions: chr [1:7995] &ldquo;14258&rdquo; &ldquo;1420&rdquo; &ldquo;1420&rdquo; &ldquo;1410&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#---extensions-chr-17995-14258-1420-1420-1410-">#</a></h2>
+<h2 id="-routes----null">$ routes   : NULL<a hidden class="anchor" aria-hidden="true" href="#-routes----null">#</a></h2>
+<p>{% endhighlight %}</p>
+<p>Objek <strong>route</strong> merupakan <em>list</em> dengan lima elemen. Yang akan kita gunakan adalah elemen data-frame pada element <strong>tracks</strong>.</p>
+<p>{% highlight r %}
+route &lt;- route$tracks[[1]][[1]]
+str(route)
+{% endhighlight %}</p>
+<p>{% highlight text %}</p>
+<h2 id="dataframe7995-obs-of--5-variables">&lsquo;data.frame&rsquo;:	7995 obs. of  5 variables:<a hidden class="anchor" aria-hidden="true" href="#dataframe7995-obs-of--5-variables">#</a></h2>
+<h2 id="-lon--------num---805--805--805--805--805-">$ lon       : num  -80.5 -80.5 -80.5 -80.5 -80.5 &hellip;<a hidden class="anchor" aria-hidden="true" href="#-lon--------num---805--805--805--805--805-">#</a></h2>
+<h2 id="-lat--------num--435-435-435-435-435-">$ lat       : num  43.5 43.5 43.5 43.5 43.5 &hellip;<a hidden class="anchor" aria-hidden="true" href="#-lat--------num--435-435-435-435-435-">#</a></h2>
+<h2 id="-ele--------chr--3353-3353-3352-3351-">$ ele       : chr  &ldquo;335.3&rdquo; &ldquo;335.3&rdquo; &ldquo;335.2&rdquo; &ldquo;335.1&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#-ele--------chr--3353-3353-3352-3351-">#</a></h2>
+<h2 id="-time-------chr--2019-06-23t130804z-2019-06-23t130805z-2019-06-23t130806z-2019-06-23t130807z-">$ time      : chr  &ldquo;2019-06-23T13:08:04Z&rdquo; &ldquo;2019-06-23T13:08:05Z&rdquo; &ldquo;2019-06-23T13:08:06Z&rdquo; &ldquo;2019-06-23T13:08:07Z&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#-time-------chr--2019-06-23t130804z-2019-06-23t130805z-2019-06-23t130806z-2019-06-23t130807z-">#</a></h2>
+<h2 id="-extensions-chr--14258-1420-1420-1410-">$ extensions: chr  &ldquo;14258&rdquo; &ldquo;1420&rdquo; &ldquo;1420&rdquo; &ldquo;1410&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#-extensions-chr--14258-1420-1420-1410-">#</a></h2>
+<p>{% endhighlight %}</p>
+<p>Sekarang objek <strong>route</strong> berupa <em>data-frame</em> dengan kolom-kolom: <em>long (longitude)</em>, <em>lat (latitude)</em>, <em>ele (elevation)</em>, <em>time</em> dan <em>extensions</em>.</p>
+<h2 id="membaca-exif-dari-foto-untuk-mendapatkan-titik-koordinatnya">Membaca <em>exif</em> dari foto untuk mendapatkan titik koordinatnya<a hidden class="anchor" aria-hidden="true" href="#membaca-exif-dari-foto-untuk-mendapatkan-titik-koordinatnya">#</a></h2>
+<p><em>Exif</em> atau medatada bisa dibaca dengan fungsi <code>read_exif</code> pada <em>package</em> <strong>exifr</strong>. Saya asumsikan file-file foto berapa pada folder <strong>img</strong> di <em>working directory</em>.</p>
+<p>{% highlight r %}
+picture_files &lt;- list.files(&ldquo;img&rdquo;, full.names = TRUE)</p>
+<p>picture_point &lt;- read_exif(picture_files,
+tags = c(&ldquo;FileName&rdquo;, &ldquo;GPSLatitude&rdquo;, &ldquo;GPSLongitude&rdquo;),
+quiet = TRUE)
+{% endhighlight %}</p>
+<p>Parameter <code>tag</code> berguna untuk memilih <em>tag</em> atau informasi apa saja yang akan diambil. Jika ingin mengambil semua informasi yang tersedia, hilangkan parameter tersebut.</p>
+<p>{% highlight r %}
+str(picture_point)
+{% endhighlight %}</p>
+<p>{% highlight text %}</p>
+<h2 id="classes-tbl_df-tbl-and-dataframe13-obs-of--4-variables">Classes &rsquo;tbl_df&rsquo;, &rsquo;tbl&rsquo; and &lsquo;data.frame&rsquo;:	13 obs. of  4 variables:<a hidden class="anchor" aria-hidden="true" href="#classes-tbl_df-tbl-and-dataframe13-obs-of--4-variables">#</a></h2>
+<h2 id="-sourcefile---chr--usersfinishpng-usersimg_20190623_091723989_hdr2jpg-usersimg_20190623_095219047_hdr2jpg-usersimg_20190623_1016447662jpg-">$ SourceFile  : chr  &ldquo;/Users/&hellip;/finish.png&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_091723989_HDR~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_095219047_HDR~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_101644766~2.jpg&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#-sourcefile---chr--usersfinishpng-usersimg_20190623_091723989_hdr2jpg-usersimg_20190623_095219047_hdr2jpg-usersimg_20190623_1016447662jpg-">#</a></h2>
+<h2 id="-filename-----chr--finishpng-img_20190623_091723989_hdr2jpg-img_20190623_095219047_hdr2jpg-img_20190623_1016447662jpg-">$ FileName    : chr  &ldquo;finish.png&rdquo; &ldquo;IMG_20190623_091723989_HDR~2.jpg&rdquo; &ldquo;IMG_20190623_095219047_HDR~2.jpg&rdquo; &ldquo;IMG_20190623_101644766~2.jpg&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#-filename-----chr--finishpng-img_20190623_091723989_hdr2jpg-img_20190623_095219047_hdr2jpg-img_20190623_1016447662jpg-">#</a></h2>
+<h2 id="-gpslatitude--num--na-435-435-435-435-">$ GPSLatitude : num  NA 43.5 43.5 43.5 43.5 &hellip;<a hidden class="anchor" aria-hidden="true" href="#-gpslatitude--num--na-435-435-435-435-">#</a></h2>
+<h2 id="-gpslongitude-num--na--806--806--806--806-">$ GPSLongitude: num  NA -80.6 -80.6 -80.6 -80.6 &hellip;<a hidden class="anchor" aria-hidden="true" href="#-gpslongitude-num--na--806--806--806--806-">#</a></h2>
+<p>{% endhighlight %}</p>
+<p>Beberapa file tanpa titik koordinat (GPSLatitude dan GPSLongitude <code>NA</code>). Untuk memilih <strong>hanya</strong> foto-foto yang memuat informasi koordinat, jalankan perintah berikut:</p>
+<p>{% highlight r %}
+picture_point &lt;- picture_point[!is.na(picture_point$GPSLatitude), ]
+str(picture_point)
+{% endhighlight %}</p>
+<p>{% highlight text %}</p>
+<h2 id="classes-tbl_df-tbl-and-dataframe10-obs-of--4-variables">Classes &rsquo;tbl_df&rsquo;, &rsquo;tbl&rsquo; and &lsquo;data.frame&rsquo;:	10 obs. of  4 variables:<a hidden class="anchor" aria-hidden="true" href="#classes-tbl_df-tbl-and-dataframe10-obs-of--4-variables">#</a></h2>
+<h2 id="-sourcefile---chr--usersimg_20190623_091723989_hdr2jpg-usersimg_20190623_095219047_hdr2jpg-usersimg_20190623_1016447662jpg-usersimg_20190623_1022306502jpg-">$ SourceFile  : chr  &ldquo;/Users/&hellip;/IMG_20190623_091723989_HDR~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_095219047_HDR~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_101644766~2.jpg&rdquo; &ldquo;/Users/&hellip;/IMG_20190623_102230650~2.jpg&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#-sourcefile---chr--usersimg_20190623_091723989_hdr2jpg-usersimg_20190623_095219047_hdr2jpg-usersimg_20190623_1016447662jpg-usersimg_20190623_1022306502jpg-">#</a></h2>
+<h2 id="-filename-----chr--img_20190623_091723989_hdr2jpg-img_20190623_095219047_hdr2jpg-img_20190623_1016447662jpg-img_20190623_1022306502jpg-">$ FileName    : chr  &ldquo;IMG_20190623_091723989_HDR~2.jpg&rdquo; &ldquo;IMG_20190623_095219047_HDR~2.jpg&rdquo; &ldquo;IMG_20190623_101644766~2.jpg&rdquo; &ldquo;IMG_20190623_102230650~2.jpg&rdquo; &hellip;<a hidden class="anchor" aria-hidden="true" href="#-filename-----chr--img_20190623_091723989_hdr2jpg-img_20190623_095219047_hdr2jpg-img_20190623_1016447662jpg-img_20190623_1022306502jpg-">#</a></h2>
+<h2 id="-gpslatitude--num--435-435-435-435-435-">$ GPSLatitude : num  43.5 43.5 43.5 43.5 43.5 &hellip;<a hidden class="anchor" aria-hidden="true" href="#-gpslatitude--num--435-435-435-435-435-">#</a></h2>
+<h2 id="-gpslongitude-num---806--806--806--806--806-">$ GPSLongitude: num  -80.6 -80.6 -80.6 -80.6 -80.6 &hellip;<a hidden class="anchor" aria-hidden="true" href="#-gpslongitude-num---806--806--806--806--806-">#</a></h2>
+<p>{% endhighlight %}</p>
+<h2 id="membuat-peta">Membuat peta!<a hidden class="anchor" aria-hidden="true" href="#membuat-peta">#</a></h2>
+<p>Saatnye manampilkan rute lari beserta foto dalam peta menggunakan <strong>leaflet</strong>. Berikut tahapannya:</p>
+<p><strong>Langkah #1</strong>. Proses membuat peta dengan <strong>leaflet</strong> diinsiasi dengan fungsi <code>leaflet</code>.  Dengan menjalankan fungsi ini, kita sedang menyiapkan sebuah &ldquo;leyer&rdquo; kosong yang di atasnya akan kita &ldquo;tumpuk&rdquo; layer-layer, seperti peta dasar <em>(base map)</em>, <em>polyline</em>, <em>polygon</em>, <em>marker</em>, dan lain-lain.</p>
+<p>{% highlight r %}
+m &lt;- leaflet()
+{% endhighlight %}</p>
+<p><strong>Langkah #2</strong>. Tambahkan peta dasar <em>(basemap)</em> pada layer kosong <strong>m</strong> dengan fungsi <code>addTiles</code>. Secara <em>default</em>, peta dasar yang digunakan adalah <a href="https://www.openstreetmap.org/">OpenStreetMap</a>.</p>
+<p>{% highlight r %}
+m &lt;- m %&gt;%
+addTiles(layerId = &ldquo;Road&rdquo;,
+group = &ldquo;Road&rdquo;)
+{% endhighlight %}</p>
+<p>Meskipun opsional, sangat disarankan untuk menggunakan parameter <code>layerId</code> dan <code>group</code>. <code>layerId</code> berfungsi untuk menandai sebuah layer atau objek pada peta. Satu atau beberapa layer bisa dikelompokkan dalam sebuah <code>group</code>. Salah satu kegunaan dari <code>layerId</code> maupun <code>group</code> adalah memudahkan kita dalam modifikas sebuah layer atau grup layer. Sebagai contoh untuk menghapus layer <em>basemap</em>:</p>
+<p>{% highlight r %}
+m %&gt;% removeTiles(&ldquo;Road&rdquo;)
+{% endhighlight %}</p>
+<p>Operator <code>%&gt;%</code> diadopsi dari <em>package</em> <a href="https://cran.r-project.org/web/packages/magrittr/index.html"><em>magrittr</em></a>, bertindak sebagai <em>forward pipe operator</em>.</p>
+<p>Perintah</p>
+<p>{% highlight r %}
+m &lt;- addTiles(m)
+{% endhighlight %}</p>
+<p>dapat ditulis dengan</p>
+<p>{% highlight r %}
+m &lt;- m %&gt;% addTiles
+{% endhighlight %}</p>
+<p>Atau secara umum</p>
+<p>{% highlight r %}
+y &lt;- h(g(f(x)))
+{% endhighlight %}</p>
+<p>sama dengan</p>
+<p>{% highlight r %}
+y &lt;- x %&gt;% f %&gt;% g %&gt;% h
+{% endhighlight %}</p>
+<p>Kembali ke <strong>leaflet</strong>. Kita sudah mempunya peta dangan satu layer peta dasar dalam objek <strong>m</strong>, yang dapat ditampilkan dengan cara memanggil objek tersebut.</p>
+<p>{% highlight r %}
+m
+{% endhighlight %}</p>
+<p>{% include iframe3x1.html url=&ldquo;<a href="https://rstudio-pubs-static.s3.amazonaws.com/510723_a13198697f414e4fad744ff18d5a5d67.html%22">https://rstudio-pubs-static.s3.amazonaws.com/510723_a13198697f414e4fad744ff18d5a5d67.html&quot;</a> %}</p>
+<p>Gunakan tombol (+) dan (-) untuk <em>zoom-in</em> atau <em>zoom-out</em> peta.</p>
+<p><strong>Langkah #3</strong>. Selain menggunakan OpenStreetMap, kita dapat menambahkan <em>basemap</em> dari <em>provider</em> lain dengan fungsi <code>addProviderTiles</code>. Misalnya:</p>
+<p>Peta <em>dark-mode</em> dari CartoDB</p>
+<p>{% highlight r %}
+m &lt;- m %&gt;%
+addProviderTiles(&ldquo;CartoDB.DarkMatter&rdquo;,
+layerId = &ldquo;Road Dark&rdquo;,
+group = &ldquo;Road Dark&rdquo;)
+{% endhighlight %}</p>
+<p>{% include iframe3x1.html url=&ldquo;<a href="https://rstudio-pubs-static.s3.amazonaws.com/510724_26f3934f95c449318d8ab42fb4d3ccf1.html%22">https://rstudio-pubs-static.s3.amazonaws.com/510724_26f3934f95c449318d8ab42fb4d3ccf1.html&quot;</a> %}</p>
+<p>Atau, citra satelit dari ESRI</p>
+<p>{% highlight r %}
+m &lt;- m %&gt;%
+addProviderTiles(&ldquo;Esri.WorldImagery&rdquo;,
+layerId = &ldquo;Satellite&rdquo;,
+group = &ldquo;Satellite&rdquo;)
+{% endhighlight %}</p>
+<p>{% include iframe3x1.html url=&ldquo;<a href="https://rstudio-pubs-static.s3.amazonaws.com/510725_6093f96266b74541b829ef672df5cd8c.html%22">https://rstudio-pubs-static.s3.amazonaws.com/510725_6093f96266b74541b829ef672df5cd8c.html&quot;</a> %}</p>
+<p>Daftar <em>provider</em> yang tersedia dapat dilihat di <a href="https://leaflet-extras.github.io/leaflet-providers/preview/">sini</a>.</p>
+<p><strong>Langkah #4</strong>. Menampilkan titik-titik koordinat rute (yang sudah kita siapkan dalam data-frame <strong>route</strong>) pada peta. Rute merupakan objek <em>polylines</em>, dapat ditampilkan dengan menggunakan fungsi <code>addPolylines</code>:</p>
+<p>{% highlight r %}
+m &lt;- m %&gt;%
+addPolylines(data=route, lng = ~lon, lat = ~lat,
+layerId = &ldquo;Running Route&rdquo;,
+group = &ldquo;Running Route&rdquo;)
+{% endhighlight %}</p>
+<p>{% include iframe.html url=&ldquo;<a href="https://rstudio-pubs-static.s3.amazonaws.com/510726_f824523f38d54170bbda99318fb146c6.html%22">https://rstudio-pubs-static.s3.amazonaws.com/510726_f824523f38d54170bbda99318fb146c6.html&quot;</a> %}</p>
+<p>Kita dapat memasukkan parameter tambahan untuk mengatur tampilan, misalnya untuk mengubah warna. Namun, hapus dulu layer sebelumnya!.</p>
+<p>{% highlight r %}
+m %&gt;% removeShape(&ldquo;Running Route&rdquo;)
+{% endhighlight %}</p>
+<p>{% highlight r %}
+m &lt;- m %&gt;%
+addPolylines(data=route, lng = ~lon, lat = ~lat,
+color = &ldquo;red&rdquo;, opacity = 1,
+layerId = &ldquo;Running Route&rdquo;,
+group = &ldquo;Running Route&rdquo;)
+{% endhighlight %}</p>
+<p>{% include iframe.html url=&ldquo;<a href="https://rstudio-pubs-static.s3.amazonaws.com/510727_aedaaad2c3794caf8cf70264a60f21a3.html%22">https://rstudio-pubs-static.s3.amazonaws.com/510727_aedaaad2c3794caf8cf70264a60f21a3.html&quot;</a> %}</p>
+<p><strong>Langkah #5</strong>. Rute sudah tergambar dalam peta. Selanjutnya adalah membuat <em>markers</em> atau penanda. Kita mulai dengan <em>markers</em> titik <em>start</em> dan <em>finish</em>. Sebelum membuat <em>markers</em>, tentukan dulu titik koordinatnya.</p>
+<ul>
+<li>Titik <em>start</em> : baris pertama pada <em>data-frame</em> <strong>route</strong></li>
+</ul>
+<p>{% highlight r %}
+start_point &lt;- head(route, 1)
+{% endhighlight %}</p>
+<ul>
+<li>Titik <em>finish</em> : baris terakhir pada <em>data-frame</em> <strong>route</strong></li>
+</ul>
+<p>{% highlight r %}
+finish_point &lt;- tail(route, 1)
+{% endhighlight %}</p>
+<p>Menambahkan <em>markers</em> pada peta dapat dilakukan dengan menggunakan fungsi <code>addMarkers</code>.</p>
+<p>{% highlight r %}
+m &lt;- m %&gt;%
+addMarkers(data = start_point, lng=~lon, lat=~lat,
+popup = &ldquo;Start&rdquo;
+layerId = &ldquo;start&rdquo;,
+group = &ldquo;Start/Finish&rdquo;)
+{% endhighlight %}</p>
+<p>{% include iframe.html url=&ldquo;<a href="https://rstudio-pubs-static.s3.amazonaws.com/511095_857484b1752b4707abefaefe0c6db128.html%22">https://rstudio-pubs-static.s3.amazonaws.com/511095_857484b1752b4707abefaefe0c6db128.html&quot;</a> %}</p>
+<p>Kita juga bisa mengubah <em>marker icon</em> dengan <em>icon</em> sesuai keinginan kita, misalnya dengan gambar <strong>start.jpg</strong>.</p>
+<p><strong>Note:</strong> Seluruh file gambar yang akan digunakan saya simpan di Github <em>directory</em></p>
+<pre tabindex="0"><code>https://raw.githubusercontent.com/nurandi/nurandi.github.io/master/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet
+</code></pre><p>Agar penulisan <em>URL</em> dari tiap gambar yang digunakan menjadi lebih sederhana, saya membuat fungsi <code>img_url</code> berikut</p>
+<p>{% highlight r %}
+img_url &lt;- function(file_name){
+file.path(&ldquo;<a href="https://raw.githubusercontent.com/nurandi/nurandi.github.io/master/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet%22">https://raw.githubusercontent.com/nurandi/nurandi.github.io/master/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet&quot;</a>, file_name)
+}
+{% endhighlight %}</p>
+<p>Sebelum gambar <em>custom</em> bisa digunakan sebagai <em>marker icon</em>, maka harus dibuat dulu dengan perintah <code>makeIcon</code></p>
+<p>{% highlight r %}
+start_icon &lt;- makeIcon(
+iconAnchorX = 12, iconAnchorY = 12,
+iconUrl = img_url(&ldquo;start.png&rdquo;)
+)
+{% endhighlight %}</p>
+<p>Barulah kita ganti <em>default icon</em> dengan <em>custom icon</em></p>
+<p>{% highlight r %}
+m %&gt;% removeMarker(&ldquo;start&rdquo;)
+{% endhighlight %}</p>
+<p>{% highlight r %}
+m &lt;- m %&gt;%
+addMarkers(data = start_point, lng=~lon, lat=~lat,
+popup = &ldquo;Start&rdquo;,
+icon = start_icon,
+layerId = &ldquo;start&rdquo;,
+group = &ldquo;Start/Finish&rdquo;)
+{% endhighlight %}</p>
+<p>{% include iframe.html url=&ldquo;<a href="http://rstudio-pubs-static.s3.amazonaws.com/556571_02992237a3e34f94a579f8fcdb503ee8.html%22">http://rstudio-pubs-static.s3.amazonaws.com/556571_02992237a3e34f94a579f8fcdb503ee8.html&quot;</a> %}</p>
+<p>Cara yang sama bisa kita lakukan untuk menambahkan <em>marker</em> titik <em>finish</em></p>
+<p>{% highlight r %}
+finish_icon &lt;- makeIcon(
+iconAnchorX = 12, iconAnchorY = 12,
+iconUrl = img_url(&ldquo;finish.png&rdquo;)
+)</p>
+<p>m &lt;- m %&gt;%
+addMarkers(data = finish_point, lng=~lon, lat=~lat,
+popup = &ldquo;Finish&rdquo;,
+icon = finish_icon,
+layerId = &ldquo;finish&rdquo;,
+group = &ldquo;Start/Finish&rdquo;)
+{% endhighlight %}</p>
+<p>{% include iframe.html url=&ldquo;<a href="https://rstudio-pubs-static.s3.amazonaws.com/556570_6ed6450fa9a34c9c89bc731f7086e55c.html%22">https://rstudio-pubs-static.s3.amazonaws.com/556570_6ed6450fa9a34c9c89bc731f7086e55c.html&quot;</a> %}</p>
+<p><strong>Langkah #6</strong>. Membuat <em>markers</em> untuk foto pada titik koordinatnya. Caranya mirip dengan Langkah #5. Yang membedakan, jika sebelumnya <em>pop up</em> berupa teks <strong>Start</strong> dan <strong>Finish</strong> maka di sini kita gunakan HTML untuk menampilkan foto.</p>
+<p>Buat <em>icon</em></p>
+<p>{% highlight r %}
+picture_icon &lt;- makeIcon(
+iconAnchorX = 12, iconAnchorY = 12,
+iconUrl = img_url(&ldquo;picture.png&rdquo;)
+)
+{% endhighlight %}</p>
+<p>Data titik koordinat foto di simpan dalam <em>data frame</em> <strong>picture_point</strong>. Kita buat kolom <strong>popup</strong> berupa kode HTML untuk menampilkan foto.</p>
+<p>{% highlight r %}
+picture_point$popup &lt;- paste(&rsquo;<img src="', 
+img_url(picture_point$FileName), 
+'" height="auto" width="250">&rsquo;, sep=&rsquo;&rsquo;)
+{% endhighlight %}</p>
+<p>Tampilkan <em>markers</em></p>
+<p>{% highlight r %}
+m &lt;- m %&gt;%
+addMarkers(data = picture_point, lng=~GPSLongitude, lat=~GPSLatitude,
+popup = ~popup,
+icon = picture_icon,
+options = popupOptions(maxWidth= &ldquo;auto&rdquo;,keepInView = TRUE),
+group =&lsquo;Pictures&rsquo;)
+{% endhighlight %}</p>
+<p>{% include iframe.html url=&ldquo;<a href="http://rstudio-pubs-static.s3.amazonaws.com/556572_15b456405a114aaead4d0e7aed54c121.html%22">http://rstudio-pubs-static.s3.amazonaws.com/556572_15b456405a114aaead4d0e7aed54c121.html&quot;</a> %}</p>
+<p>Jika salah satu <em>marker</em> kita klik, foto akan muncul pada <em>pop up</em>.</p>
+<p><strong>Langkah #7</strong>. Atau langkah terakhir adalah membuat <em>layer control</em>, agar <em>user</em> dapat:</p>
+<ul>
+<li>memilih <em>basemap</em> apa yang akan digunakan</li>
+<li>menampilkan atau menyebunyikan rute, <em>markers start/finish</em>, maupun <em>markers</em> foto.</li>
+</ul>
+<p>Fungsi yang digunakan adalah <code>addLayersControl</code></p>
+<p>{% highlight r %}
+m &lt;- m %&gt;%
+addLayersControl(position = &rsquo;topright&rsquo;,
+baseGroups = c(&ldquo;Road&rdquo;, &ldquo;Road Dark&rdquo;, &ldquo;Satellite&rdquo;),
+overlayGroups = c(&ldquo;Running Route&rdquo;, &ldquo;Start/Finish&rdquo;, &ldquo;Pictures&rdquo;),
+options = layersControlOptions(collapsed = FALSE))
+{% endhighlight %}</p>
+<p>{% include iframe.html url=&ldquo;<a href="http://rstudio-pubs-static.s3.amazonaws.com/556573_0682aa10717340f7a09a36fa09a3da16.html%22">http://rstudio-pubs-static.s3.amazonaws.com/556573_0682aa10717340f7a09a36fa09a3da16.html&quot;</a> %}</p>
+<p><strong>Selesai!</strong></p>
+<hr>
+<p>Jika digabungkan, maka inilah kode lengkap untuk menampilkan rute lari beserta foto dengan menggunakan R dan <strong>leaflet</strong>:</p>
+<p>{% highlight r %}</p>
+<h1 id="install-packages-yg-diperlukan">install package(s) yg diperlukan<a hidden class="anchor" aria-hidden="true" href="#install-packages-yg-diperlukan">#</a></h1>
+<p>install.packages(c(&ldquo;plotKML&rdquo;, &ldquo;exifr&rdquo;, &ldquo;leaflet&rdquo;))</p>
+<h1 id="load-packages">load package(s)<a hidden class="anchor" aria-hidden="true" href="#load-packages">#</a></h1>
+<p>library(plotKML)
+library(exifr)
+library(leaflet)</p>
+<h1 id="membaca-rute-dari-file-gpx">membaca rute dari file GPX<a hidden class="anchor" aria-hidden="true" href="#membaca-rute-dari-file-gpx">#</a></h1>
+<p>gpx_file &lt;- &ldquo;Light_Trail_at_Laurel_Creek.gpx&rdquo;
+route &lt;- readGPX(gpx_file)
+route &lt;- route$tracks[[1]][[1]]</p>
+<h1 id="tentukan-titik-startfinish">tentukan titik start/finish<a hidden class="anchor" aria-hidden="true" href="#tentukan-titik-startfinish">#</a></h1>
+<p>start_point &lt;- head(route, 1)
+finish_point &lt;- tail(route, 1)</p>
+<h1 id="membaca-exif-dari-foto">membaca exif dari foto<a hidden class="anchor" aria-hidden="true" href="#membaca-exif-dari-foto">#</a></h1>
+<p>picture_files &lt;- list.files(&ldquo;img&rdquo;, full.names = TRUE)
+picture_point &lt;- read_exif(picture_files,
+tags = c(&ldquo;FileName&rdquo;, &ldquo;GPSLatitude&rdquo;, &ldquo;GPSLongitude&rdquo;),
+quiet = TRUE)</p>
+<h1 id="pilih-foto-yang-mempunyai-informasi-koordinat">pilih foto yang mempunyai informasi koordinat<a hidden class="anchor" aria-hidden="true" href="#pilih-foto-yang-mempunyai-informasi-koordinat">#</a></h1>
+<p>picture_point &lt;- picture_point[!is.na(picture_point$GPSLatitude), ]</p>
+<h1 id="membuat-icon-untuk-titik-startfinishpicture">membuat icon untuk titik start/finish/picture<a hidden class="anchor" aria-hidden="true" href="#membuat-icon-untuk-titik-startfinishpicture">#</a></h1>
+<p>img_url &lt;- function(file_name){
+file.path(&ldquo;<a href="https://raw.githubusercontent.com/nurandi/nurandi.github.io/master/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet%22">https://raw.githubusercontent.com/nurandi/nurandi.github.io/master/img/blog/2019-07-15-visualisasi-rute-lari-dengan-r-dan-leaflet&quot;</a>, file_name)
+}</p>
+<p>start_icon &lt;- makeIcon(
+iconAnchorX = 12, iconAnchorY = 12,
+iconUrl = img_url(&ldquo;start.png&rdquo;)
+)</p>
+<p>finish_icon &lt;- makeIcon(
+iconAnchorX = 12, iconAnchorY = 12,
+iconUrl = img_url(&ldquo;finish.png&rdquo;)
+)</p>
+<p>picture_icon &lt;- makeIcon(
+iconAnchorX = 12, iconAnchorY = 12,
+iconUrl = img_url(&ldquo;picture.png&rdquo;)
+)</p>
+<h1 id="membuat-kode-html-untuk-pop-up-picture">membuat kode HTML untuk pop-up picture<a hidden class="anchor" aria-hidden="true" href="#membuat-kode-html-untuk-pop-up-picture">#</a></h1>
+<p>picture_point$popup &lt;- paste(&rsquo;<img src="', 
+img_url(picture_point$FileName), 
+'" height="auto" width="250">&rsquo;, sep=&rsquo;&rsquo;)</p>
+<h1 id="membuat-peta-1">MEMBUAT PETA<a hidden class="anchor" aria-hidden="true" href="#membuat-peta-1">#</a></h1>
+<h1 id="inisiasi-peta-dengan-leaflet">inisiasi peta dengan leaflet<a hidden class="anchor" aria-hidden="true" href="#inisiasi-peta-dengan-leaflet">#</a></h1>
+<p>m &lt;- leaflet() %&gt;%</p>
+<pre><code># base map default
+addTiles(layerId = &quot;Road&quot;,
+         group = &quot;Road&quot;) %&gt;%
+
+# base map CartoDB
+addProviderTiles(&quot;CartoDB.DarkMatter&quot;, 
+                 layerId = &quot;Road Dark&quot;,
+                 group = &quot;Road Dark&quot;) %&gt;%
+
+# basemap satellite
+addProviderTiles(&quot;Esri.WorldImagery&quot;, 
+                 layerId = &quot;Satellite&quot;,
+                 group = &quot;Satellite&quot;) %&gt;%
+
+# route
+addPolylines(data=route, lng = ~lon, lat = ~lat, 
+             color = &quot;red&quot;, opacity = 1,
+             layerId = &quot;Running Route&quot;,
+             group = &quot;Running Route&quot;) %&gt;%
+
+# start marker
+addMarkers(data = start_point, lng=~lon, lat=~lat,
+           popup = &quot;Start&quot;,
+           icon = start_icon,
+           layerId = &quot;start&quot;,
+           group = &quot;Start/Finish&quot;) %&gt;%
+
+# finish marker
+addMarkers(data = finish_point, lng=~lon, lat=~lat,
+           popup = &quot;Finish&quot;,
+           icon = finish_icon,
+           layerId = &quot;finish&quot;,
+           group = &quot;Start/Finish&quot;) %&gt;%
+
+# picture marker dan pop-up
+addMarkers(data = picture_point, lng=~GPSLongitude, lat=~GPSLatitude,
+           popup = ~popup,
+           icon = picture_icon,
+           options = popupOptions(maxWidth= &quot;auto&quot;,keepInView = TRUE),
+           group ='Pictures') %&gt;%
+
+# layer control
+addLayersControl(position = 'topright',
+                 baseGroups = c(&quot;Road&quot;, &quot;Road Dark&quot;, &quot;Satellite&quot;),
+                 overlayGroups = c(&quot;Running Route&quot;, &quot;Start/Finish&quot;, &quot;Pictures&quot;),
+                 options = layersControlOptions(collapsed = FALSE)) 
+</code></pre>
+<h1 id="selesai">selesai<a hidden class="anchor" aria-hidden="true" href="#selesai">#</a></h1>
+<p>m
+{% endhighlight %}</p>
+<hr>
+<p>Selamat mencoba. Semoga bermanfaat :)</p>
+
+
+  </div>
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="/tags/r/">R</a></li>
+      <li><a href="/tags/leaflet/">leaflet</a></li>
+      <li><a href="/tags/strava/">strava</a></li>
+      <li><a href="/tags/rute/">rute</a></li>
+      <li><a href="/tags/gis/">gis</a></li>
+      <li><a href="/tags/data-viz/">data-viz</a></li>
+      <li><a href="/tags/running/">running</a></li>
+      <li><a href="/tags/marathon/">marathon</a></li>
+    </ul>
+<nav class="paginav">
+  <a class="prev" href="/blog/rtweet-crawling-data-twitter-menggunakan-r/">
+    <span class="title">« Prev</span>
+    <br>
+    <span>rtweet: Crawling Data Twitter Menggunakan R</span>
+  </a>
+  <a class="next" href="/blog/web-scraping-dengan-r-dan-rvest/">
+    <span class="title">Next »</span>
+    <br>
+    <span>Web Scraping dengan R dan rvest</span>
+  </a>
+</nav>
+
+
+<div class="share-buttons">
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Visualisasi Rute Lari dengan R dan Leaflet on x"
+        href="https://x.com/intent/tweet/?text=Visualisasi%20Rute%20Lari%20dengan%20R%20dan%20Leaflet&amp;url=%2fblog%2fvisualisasi-rute-lari-dengan-r-dan-leaflet%2f&amp;hashtags=r%2cleaflet%2cstrava%2crute%2cgis%2cdata-viz%2crunning%2cmarathon">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M512 62.554 L 512 449.446 C 512 483.97 483.97 512 449.446 512 L 62.554 512 C 28.03 512 0 483.97 0 449.446 L 0 62.554 C 0 28.03 28.029 0 62.554 0 L 449.446 0 C 483.971 0 512 28.03 512 62.554 Z M 269.951 190.75 L 182.567 75.216 L 56 75.216 L 207.216 272.95 L 63.9 436.783 L 125.266 436.783 L 235.9 310.383 L 332.567 436.783 L 456 436.783 L 298.367 228.367 L 432.367 75.216 L 371.033 75.216 Z M 127.633 110 L 164.101 110 L 383.481 400.065 L 349.5 400.065 Z"/>
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Visualisasi Rute Lari dengan R dan Leaflet on linkedin"
+        href="https://www.linkedin.com/shareArticle?mini=true&amp;url=%2fblog%2fvisualisasi-rute-lari-dengan-r-dan-leaflet%2f&amp;title=Visualisasi%20Rute%20Lari%20dengan%20R%20dan%20Leaflet&amp;summary=Visualisasi%20Rute%20Lari%20dengan%20R%20dan%20Leaflet&amp;source=%2fblog%2fvisualisasi-rute-lari-dengan-r-dan-leaflet%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-288.985,423.278l0,-225.717l-75.04,0l0,225.717l75.04,0Zm270.539,0l0,-129.439c0,-69.333 -37.018,-101.586 -86.381,-101.586c-39.804,0 -57.634,21.891 -67.617,37.266l0,-31.958l-75.021,0c0.995,21.181 0,225.717 0,225.717l75.02,0l0,-126.056c0,-6.748 0.486,-13.492 2.474,-18.315c5.414,-13.475 17.767,-27.434 38.494,-27.434c27.135,0 38.007,20.707 38.007,51.037l0,120.768l75.024,0Zm-307.552,-334.556c-25.674,0 -42.448,16.879 -42.448,39.002c0,21.658 16.264,39.002 41.455,39.002l0.484,0c26.165,0 42.452,-17.344 42.452,-39.002c-0.485,-22.092 -16.241,-38.954 -41.943,-39.002Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Visualisasi Rute Lari dengan R dan Leaflet on reddit"
+        href="https://reddit.com/submit?url=%2fblog%2fvisualisasi-rute-lari-dengan-r-dan-leaflet%2f&title=Visualisasi%20Rute%20Lari%20dengan%20R%20dan%20Leaflet">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-3.446,265.638c0,-22.964 -18.616,-41.58 -41.58,-41.58c-11.211,0 -21.361,4.457 -28.841,11.666c-28.424,-20.508 -67.586,-33.757 -111.204,-35.278l18.941,-89.121l61.884,13.157c0.756,15.734 13.642,28.29 29.56,28.29c16.407,0 29.706,-13.299 29.706,-29.701c0,-16.403 -13.299,-29.702 -29.706,-29.702c-11.666,0 -21.657,6.792 -26.515,16.578l-69.105,-14.69c-1.922,-0.418 -3.939,-0.042 -5.585,1.036c-1.658,1.073 -2.811,2.761 -3.224,4.686l-21.152,99.438c-44.258,1.228 -84.046,14.494 -112.837,35.232c-7.468,-7.164 -17.589,-11.591 -28.757,-11.591c-22.965,0 -41.585,18.616 -41.585,41.58c0,16.896 10.095,31.41 24.568,37.918c-0.639,4.135 -0.99,8.328 -0.99,12.576c0,63.977 74.469,115.836 166.33,115.836c91.861,0 166.334,-51.859 166.334,-115.836c0,-4.218 -0.347,-8.387 -0.977,-12.493c14.564,-6.47 24.735,-21.034 24.735,-38.001Zm-119.474,108.193c-20.27,20.241 -59.115,21.816 -70.534,21.816c-11.428,0 -50.277,-1.575 -70.522,-21.82c-3.007,-3.008 -3.007,-7.882 0,-10.889c3.003,-2.999 7.882,-3.003 10.885,0c12.777,12.781 40.11,17.317 59.637,17.317c19.522,0 46.86,-4.536 59.657,-17.321c3.016,-2.999 7.886,-2.995 10.885,0.008c3.008,3.011 3.003,7.882 -0.008,10.889Zm-5.23,-48.781c-16.373,0 -29.701,-13.324 -29.701,-29.698c0,-16.381 13.328,-29.714 29.701,-29.714c16.378,0 29.706,13.333 29.706,29.714c0,16.374 -13.328,29.698 -29.706,29.698Zm-160.386,-29.702c0,-16.381 13.328,-29.71 29.714,-29.71c16.369,0 29.689,13.329 29.689,29.71c0,16.373 -13.32,29.693 -29.689,29.693c-16.386,0 -29.714,-13.32 -29.714,-29.693Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Visualisasi Rute Lari dengan R dan Leaflet on facebook"
+        href="https://facebook.com/sharer/sharer.php?u=%2fblog%2fvisualisasi-rute-lari-dengan-r-dan-leaflet%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-106.468,0l0,-192.915l66.6,0l12.672,-82.621l-79.272,0l0,-53.617c0,-22.603 11.073,-44.636 46.58,-44.636l36.042,0l0,-70.34c0,0 -32.71,-5.582 -63.982,-5.582c-65.288,0 -107.96,39.569 -107.96,111.204l0,62.971l-72.573,0l0,82.621l72.573,0l0,192.915l-191.104,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Visualisasi Rute Lari dengan R dan Leaflet on whatsapp"
+        href="https://api.whatsapp.com/send?text=Visualisasi%20Rute%20Lari%20dengan%20R%20dan%20Leaflet%20-%20%2fblog%2fvisualisasi-rute-lari-dengan-r-dan-leaflet%2f">
+        <svg version="1.1" viewBox="0 0 512 512" xml:space="preserve" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M449.446,0c34.525,0 62.554,28.03 62.554,62.554l0,386.892c0,34.524 -28.03,62.554 -62.554,62.554l-386.892,0c-34.524,0 -62.554,-28.03 -62.554,-62.554l0,-386.892c0,-34.524 28.029,-62.554 62.554,-62.554l386.892,0Zm-58.673,127.703c-33.842,-33.881 -78.847,-52.548 -126.798,-52.568c-98.799,0 -179.21,80.405 -179.249,179.234c-0.013,31.593 8.241,62.428 23.927,89.612l-25.429,92.884l95.021,-24.925c26.181,14.28 55.659,21.807 85.658,21.816l0.074,0c98.789,0 179.206,-80.413 179.247,-179.243c0.018,-47.895 -18.61,-92.93 -52.451,-126.81Zm-126.797,275.782l-0.06,0c-26.734,-0.01 -52.954,-7.193 -75.828,-20.767l-5.441,-3.229l-56.386,14.792l15.05,-54.977l-3.542,-5.637c-14.913,-23.72 -22.791,-51.136 -22.779,-79.287c0.033,-82.142 66.867,-148.971 149.046,-148.971c39.793,0.014 77.199,15.531 105.329,43.692c28.128,28.16 43.609,65.592 43.594,105.4c-0.034,82.149 -66.866,148.983 -148.983,148.984Zm81.721,-111.581c-4.479,-2.242 -26.499,-13.075 -30.604,-14.571c-4.105,-1.495 -7.091,-2.241 -10.077,2.241c-2.986,4.483 -11.569,14.572 -14.182,17.562c-2.612,2.988 -5.225,3.364 -9.703,1.12c-4.479,-2.241 -18.91,-6.97 -36.017,-22.23c-13.314,-11.876 -22.304,-26.542 -24.916,-31.026c-2.612,-4.484 -0.279,-6.908 1.963,-9.14c2.016,-2.007 4.48,-5.232 6.719,-7.847c2.24,-2.615 2.986,-4.484 4.479,-7.472c1.493,-2.99 0.747,-5.604 -0.374,-7.846c-1.119,-2.241 -10.077,-24.288 -13.809,-33.256c-3.635,-8.733 -7.327,-7.55 -10.077,-7.688c-2.609,-0.13 -5.598,-0.158 -8.583,-0.158c-2.986,0 -7.839,1.121 -11.944,5.604c-4.105,4.484 -15.675,15.32 -15.675,37.364c0,22.046 16.048,43.342 18.287,46.332c2.24,2.99 31.582,48.227 76.511,67.627c10.685,4.615 19.028,7.371 25.533,9.434c10.728,3.41 20.492,2.929 28.209,1.775c8.605,-1.285 26.499,-10.833 30.231,-21.295c3.732,-10.464 3.732,-19.431 2.612,-21.298c-1.119,-1.869 -4.105,-2.99 -8.583,-5.232Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Visualisasi Rute Lari dengan R dan Leaflet on telegram"
+        href="https://telegram.me/share/url?text=Visualisasi%20Rute%20Lari%20dengan%20R%20dan%20Leaflet&amp;url=%2fblog%2fvisualisasi-rute-lari-dengan-r-dan-leaflet%2f">
+        <svg version="1.1" xml:space="preserve" viewBox="2 2 28 28" height="30px" width="30px" fill="currentColor">
+            <path
+                d="M26.49,29.86H5.5a3.37,3.37,0,0,1-2.47-1,3.35,3.35,0,0,1-1-2.47V5.48A3.36,3.36,0,0,1,3,3,3.37,3.37,0,0,1,5.5,2h21A3.38,3.38,0,0,1,29,3a3.36,3.36,0,0,1,1,2.46V26.37a3.35,3.35,0,0,1-1,2.47A3.38,3.38,0,0,1,26.49,29.86Zm-5.38-6.71a.79.79,0,0,0,.85-.66L24.73,9.24a.55.55,0,0,0-.18-.46.62.62,0,0,0-.41-.17q-.08,0-16.53,6.11a.59.59,0,0,0-.41.59.57.57,0,0,0,.43.52l4,1.24,1.61,4.83a.62.62,0,0,0,.63.43.56.56,0,0,0,.4-.17L16.54,20l4.09,3A.9.9,0,0,0,21.11,23.15ZM13.8,20.71l-1.21-4q8.72-5.55,8.78-5.55c.15,0,.23,0,.23.16a.18.18,0,0,1,0,.06s-2.51,2.3-7.52,6.8Z" />
+        </svg>
+    </a>
+    <a target="_blank" rel="noopener noreferrer" aria-label="share Visualisasi Rute Lari dengan R dan Leaflet on ycombinator"
+        href="https://news.ycombinator.com/submitlink?t=Visualisasi%20Rute%20Lari%20dengan%20R%20dan%20Leaflet&u=%2fblog%2fvisualisasi-rute-lari-dengan-r-dan-leaflet%2f">
+        <svg version="1.1" xml:space="preserve" width="30px" height="30px" viewBox="0 0 512 512" fill="currentColor"
+            xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape">
+            <path
+                d="M449.446 0C483.971 0 512 28.03 512 62.554L512 449.446C512 483.97 483.97 512 449.446 512L62.554 512C28.03 512 0 483.97 0 449.446L0 62.554C0 28.03 28.029 0 62.554 0L449.446 0ZM183.8767 87.9921H121.8427L230.6673 292.4508V424.0079H281.3328V292.4508L390.1575 87.9921H328.1233L256 238.2489z" />
+        </svg>
+    </a>
+</div>
+
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+    <span>&copy; 2023 <a href="/">PaperMod</a></span>
+    <span>
+        Powered by
+        <a href="https://gohugo.io/" rel="noopener noreferrer" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z" />
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu')
+    if (menu) {
+        menu.scrollLeft = localStorage.getItem("menu-scroll-position");
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var mybutton = document.getElementById("top-link");
+    window.onscroll = function () {
+        if (document.body.scrollTop > 800 || document.documentElement.scrollTop > 800) {
+            mybutton.style.visibility = "visible";
+            mybutton.style.opacity = "1";
+        } else {
+            mybutton.style.visibility = "hidden";
+            mybutton.style.opacity = "0";
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        if (document.body.className.includes("dark")) {
+            document.body.classList.remove('dark');
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            document.body.classList.add('dark');
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>

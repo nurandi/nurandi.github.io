@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>RStudio on PaperMod</title>
+    <link>/tags/rstudio/</link>
+    <description>Recent content in RStudio on PaperMod</description>
+    <image>
+      <title>PaperMod</title>
+      <url>/papermod-cover.png</url>
+      <link>/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 08 Dec 2019 21:13:14 -0500</lastBuildDate><atom:link href="/tags/rstudio/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Kombinasi Apik buat Blogging: RStudio, Jekyll, GitHub</title>
+      <link>/blog/kombinasi-apik-buat-blogging-rstudio-jekyll-github/</link>
+      <pubDate>Sun, 08 Dec 2019 21:13:14 -0500</pubDate>
+      
+      <guid>/blog/kombinasi-apik-buat-blogging-rstudio-jekyll-github/</guid>
+      <description>Sejak beralih dari Wordpress ke Jekyll dan GitHub beberapa tahun terakhir, alur untuk penulisan dan penerbitan artikel biasanya: menulis file markdown di Notepad/Notepad++ → jekyll serve untuk generate blog sehingga bisa dilakukan pratinjau → jika sudah sesuai, git push ke GitHub untuk menerbitkan artikel. Tidak ada yang salah dengan workflow seperti ini. Hanya saja, saya sedikit &amp;ldquo;kerepotan&amp;rdquo; karena ada beberapa aplikasi yang harus saya buka secara bergantian, yaitu:
+Notepad/Notepad++ untuk menulis artikel dalam format markdown.</description>
+    </item>
+    
+  </channel>
+</rss>
