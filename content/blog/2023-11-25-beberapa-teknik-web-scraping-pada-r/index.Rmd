@@ -1,0 +1,155 @@
+---
+title: Beberapa Teknik Web Scraping pada R
+author: ''
+date: '2023-11-25'
+slug: beberapa-teknik-web-scraping-pada-r
+categories:
+  - r
+  - scraping
+tags:
+  - r
+  - scraping
+---
+
+*Web scraping* adalah proses pengambilan data dari halaman web secara otomatis menggunakan kode atau perintah tertentu. Data yang diambil dapat berupa teks, gambar, atau format data lainnya. *Web scraping* dapat digunakan untuk berbagai tujuan, seperti mengumpulkan data untuk penelitian, analisis, atau pengembangan produk.
+
+Teknik *web scraping* yang paling sering digunakan adalah dengan memanfaatkan **HTML parser** untuk mengakses dan memanipulasi DOM *(Document Object Model)* dari halaman HTML. DOM adalah representasi abstrak dari halaman HTML dalam bentuk objek. Setiap objek DOM mewakili elemen HTML, seperti tag, atribut, dan teks. HTML parser umumnya terdiri dari banyak fungsi untuk setiap tujuan yang spesifik. Misalnya kode `R` di bawah ini: fungsi `html_elements()` dari *package* `rvest` digunakan untuk mengambil semua elemen `h3` dengan `class=title`. Sementara `html_text()` digunakan untuk mengambil teks dari elemen tersebut. 
+
+![Tempo](image/tempo.jpg)
+
+```{r}
+library(rvest)
+
+url <- "https://www.tempo.co/"
+news_title <- url %>%
+  read_html() %>%
+  html_elements("h3.title") %>%
+  html_text()
+news_title 
+```
+
+Untuk lebih detail mengenai `rvest`, bisa lihat artikel sebelumnya di [sini](https://www.nurandi.id/blog/web-scraping-dengan-r-dan-rvest/) atau di [sini](https://www.nurandi.id/blog/web-scraping-dengan-r-dan-rvest-parsing-tabel-html/).
+
+Selain menggunakan *HTML parser* ada teknik lain yang bisa dipilih tergantung dari bagaimana data yang akan diekstrak "ditulis" dalam website, yaitu:
+
+1. Menggunakan regex
+2. Melalui API resmi
+3. Intercept XHR request
+4. Ekstrak json dari source HTML
+
+**PS:** Meskipun judulnya "...pada R", sebetulnya semua teknik ini bisa diterapkan pada bahasa pemrograman lain, seperti *Python*. Hanya penulisan kodenya saja yang perlu disesuaikan.
+
+# *Regular Expression (Regex)*
+
+*Regex* dapat digunakan untuk mengekstrak data dari HTML dengan cara mencocokkan pola tertentu. Teknik ini memang lebih rumit dibandingkan menggunakan parser, dan biasanya dipakai ketika data yang ingin kita ekstrak tidak berada pada objek DOM tertentu secara utuh. Misalnya, kita hendak mengambil nomor *handphone*  dari suatu teks, kita dapat menggunakan *regex* berikut. 
+
+```
+(0|62)8[1-9][0-9]{6,9}
+```
+
+Regex ini terdiri dari beberapa bagian, yaitu:
+
++ `(0|62)`: Bagian ini akan mencocokkan angka 0 atau 62, yang merupakan kode negara Indonesia.
++ `8[1-9]`: Bagian ini akan mencocokkan angka 8 diikuti oleh satu angka dari 1 hingga 9.
+* `[0-9]{6,9}`: Bagian ini akan mencocokkan satu angka dari 0 hingga 9 yang diulang sebanyak 6 hingga 9 kali.
+
+Contoh implementasi pada R:
+
+![Virtual](image/virtual.jpg)
+
+
+```{r}
+library(stringr)
+
+readLines("https://virtual.tiiny.site/") %>%
+  paste0(collapse = " ") %>%
+  str_extract_all("(0|62)8[1-9][0-9]{6,9}")
+```
+
+*Regex* sulit digunakan untuk pola yang kompleks sehingga biasanya menjadi pilihan terakhir yang dipakai untuk *scraping*. Meskipun demikian, *regex* sangat *powerful* sebagai alat untuk *data cleansing*. Lebih detail mengenai *regex* pada R, bisa pelajari artikel [ini](https://cran.r-project.org/web/packages/stringr/vignettes/regular-expressions.html)
+
+# *Application Public Interface (API)*
+
+*Web scraping* melalui *API (Application Programming Interface)* adalah pendekatan yang lebih terkontrol untuk mengekstrak data dari situs web dibandingkan dengan metode lainnya. Alih-alih mengakses langsung konten HTML dari situs web, cara ini melibatkan pembuatan permintaan *(request)* ke layanan web yang memberikan akses ke data dalam format terstruktur, seperti JSON atau XML. Umumnya, penyedia API juga menyediakan dokumentasi tentang aturan penggunaanya (terkait URL *end-point*, *query-string*, *header*, dan lain-lain) sehingga lebih mudah diimplementasikan oleh pihak ke-3. Layanan yang menyediakan API antara lain media sosial seperti [X/Twitter](https://developer.twitter.com/en) dan [Strava](https://developers.strava.com/) serta [Badan Pusat Statistik](https://webapi.bps.go.id/developer/). 
+
+![BPS Web API](image/bps.png)
+
+Sebagai contoh, kode ini melakukan permintaan data ekspor bulanan sepanjang tahun 2020 untuk kode HS 01 melalui WebAPI:
+
+
+```{r eval=FALSE}
+library(jsonlite)
+library(tibble)
+
+url <- "https://webapi.bps.go.id/v1/api/dataexim/sumber/1/kodehs/01/jenishs/1/tahun/2020/periode/1/key/<BPS_APP_ID>/"
+data <- fromJSON(url)
+
+tibble(data$data)
+```
+
+
+```{r echo=FALSE}
+library(jsonlite)
+library(tibble)
+
+url <- paste0("https://webapi.bps.go.id/v1/api/dataexim/sumber/1/kodehs/01/jenishs/1/tahun/2020/periode/1/key/", Sys.getenv("BPS_APP_ID"))
+data <- fromJSON(url)
+
+tibble(data$data)
+```
+
+# *Intercept XHR API*
+
+Sebuah web yang memuat data secara dinamis biasanya menggunakan *XMLHttpRequests (XHRs) API* untuk berkomunikasi dan bertukar data dengan server tanpa perlu me-refresh halaman. Artinya, dengan memanfaatkan API tersebut, kita bisa mendapatkan data yang inginkan. Teknik ini sebetulnya sangat mirip dengan *scraping* melalui API yang dibahas sebelumnya. Hanya saja, kita perlu "menginspeksi" laman web untuk mengetahui struktur API tersebut (*end-point*, *query-string*, dan lain-lain). Misalnya, dari hasil *inspect* diketahui laman [pricebook](https://www.pricebook.co.id/tablet?brand=Samsung) memanggil API melalui URL:
+
+![pricebook](image/pricebook.png)
+
+```
+https://gateway.pricebook.co.id/pb/category/product?category_id=42&brand=Samsung
+```
+
+untuk menampilkan daftar produk kategori Tablet dengan merk Samsung. Dengan mengubah nilai bagi `category_id` dan `brand` pada URL tersebut, kita bisa memperioleh list produk dari kategori dan merek lainnya.
+
+
+```{r}
+library(jsonlite)
+
+url <- "https://gateway.pricebook.co.id/pb/category/product?category_id=42&brand=Samsung"
+data <- fromJSON(url)
+product <- data$result$product
+
+tibble(product)
+```
+
+# Ekstrak JSON dari HTML
+
+Beberapa website menggunakan JSON *(JavaScript Object Notation)* untuk mengatur kontennya, baik berupa JSON-LD *(JSON for Linking Data)* atau sebagai *JavaScript variable*. JSON tersebut dapat ditemukan di *source HTML*. JSON-LD, misalnya, berada pada elemen `<script type="application/ld+json">` sehingga dengan memanfaatkan HTML parser, kita dapat mengekstrak data tersebut.
+
+![Tempo video](image/tempo2.png)
+
+
+```{r}
+library(rvest)
+library(jsonlite)
+library(stringr)
+
+url <- "https://video.tempo.co/read/35926/gencatan-senjata-hamas-dan-israel-di-gaza-dimulai-jumat-pagi-pukul-07-00-waktu-setempat"
+product <- read_html(url) %>% 
+html_node(xpath = '//script[@type ="application/ld+json"]') %>% 
+  html_text() %>%
+  str_remove_all("\r\n") %>%
+  fromJSON()
+
+product$video
+```
+Dari output di atas, terlihat bahwa dengan mengekstraksi JSON-LD, kita dapat memperoleh beberapa informasi sekaligus. Hal ini tentu lebih sederhana dibandingkan dengan mengekstrak satu-per-satu element HTML.
+
+--- 
+
+Itulah beberapa teknik yang dapat digunakan untuk *scraping* website menggunakan R (atau tools lainnya). Teknik mana yang dipilih tentunya perlu disesuaikan dengan kondisi website. 
+
+**PS:** *Semua gambar adalah hasil *screen-shot* pada 26 Nov 2013.*
+
+
+
+
