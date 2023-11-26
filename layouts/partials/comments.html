@@ -1,5 +1,9 @@
 {{- /* Comments area start */ -}}
+
+{{ if not .Params.noComment }}
  <div class="disqus markdown">
     {{ partial "disqus.html" . }}
  </div>
+{{ end }}
+
 {{- /* Comments area end */ -}}
