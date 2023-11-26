@@ -1,7 +1,5 @@
 .Rproj.user/**
 .Rproj.user/
-.Rhistory
-.RData
 /public/
 /resources/_gen/
-
+/assets/jsconfig.json
