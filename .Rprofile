@@ -21,6 +21,3 @@ options(
 
 # fix Hugo version
 options(blogdown.hugo.version = "0.120.4")
-
-# default directory for article
-options(blogdown.subdir = 'blog')
