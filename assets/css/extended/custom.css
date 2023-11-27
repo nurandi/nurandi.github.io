@@ -27,6 +27,16 @@ padding-right: 0.5em;
 }
 
 /* disqus */
-#disqus_thread{
+#disqus_thread {
 	padding-top:30px;
+}
+
+/* bibliography */
+#refs {
+	font-size:90%;
+}
+
+/* html widget */
+.html-widget {
+	margin-bottom: 20px;
 }
