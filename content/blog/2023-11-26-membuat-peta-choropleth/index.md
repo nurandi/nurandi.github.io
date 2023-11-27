@@ -36,7 +36,7 @@ Data spasial merupakan data yang merepresentasikan gambaran kejadian di permukaa
 
 Format *shapefiles* merupakan format yang sering banyak digunakan. Sehingga berbagai *software* yang mendukung analisis data spasial biasanya dapat digunakan untuk membuka dan mengelola *shapefiles*, termasuk R.
 
-Data spasial biasanya disajikan dalam bentuk peta tematik. Salah satu jenis peta yang banyak digunakan adalah peta *choropleth*, yaitu jenis peta tematik yang merepresentasikan data/statistik menggunakan berbagai gradasi warna dan simbol di atas area area geografis tertentu (misalnya negara, provinsi, kabupaten dan lain-lain)(Rahmi 2021).
+Data spasial biasanya disajikan dalam bentuk peta tematik. Salah satu jenis peta yang banyak digunakan adalah peta *choropleth*, yaitu jenis peta tematik yang merepresentasikan data/statistik menggunakan berbagai gradasi warna dan simbol di atas area area geografis tertentu (misalnya negara, provinsi, kabupaten dan lain-lain) (Rahmi 2021).
 
 Pada artikel ini akan disajikan peta *choropleth* sebaran penduduk di Kota Bogor berdasarkan kecamatan. *Shapefile* diperoleh dari *website* [data.humdata.org](https://data.humdata.org/dataset/indonesia-administrative-boundary-polygons-lines-and-places-levels-0-4b) (HDX 2020). Sedangkan data penduduk diperoleh dari [Visualisasi Data Kependudukan](https://gis.dukcapil.kemendagri.go.id/peta/)
 Kementerian Dalam Negeri (Kemendagri 2020).
