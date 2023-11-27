@@ -1,0 +1,186 @@
+---
+title: Membuat Peta Choropleth
+author: ''
+date: '2023-11-26'
+slug: membuat-peta-choropleth
+categories:
+  - r
+  - visualization
+tags:
+  - r
+  - visualization
+  - ggplot2
+  - leaflet
+bibliography: ../../bibliography.bib
+---
+
+```{r setup, include=FALSE} 
+knitr::opts_chunk$set(warning = FALSE, message = FALSE) 
+```
+
+Data spasial merupakan data yang merepresentasikan gambaran kejadian di permukaan bumi yang disajikan dalam bentuk peta, grafik dan gambar berformat digital. Data spasial tidak hanya terdiri dari baris dan kolom seperti data tabular pada umumnya, tetapi juga mencakup informasi geometris objek seperti titik (koordinat), garis, dan poligon atau area. Format yang paling umum digunakan untuk data spasial adalah *shapefiles* yang dikembangkan oleh [ESRI](https://www.esri.com/en-us/home). Format lain yang bisa dipakai antara lain *GeoJSON* dan *GeoPackage*. Pada latihan ini akan fokus pada data spasial yang disimpan dalam format *shapefiles*.
+
+**Shapefiles** merupakan format vektor dari data spasial yang terdiri dari beberapa ekstensi file [@ANISADKK], yaitu:
+
+* *Shapefile shape* (.shp)
+* *Shapefile shape index* (.shx)
+* *Shapefile attribute* (.dbf)
+
+Format *shapefiles* merupakan format yang sering banyak digunakan. Sehingga berbagai *software* yang mendukung analisis data spasial biasanya dapat digunakan untuk membuka dan mengelola *shapefiles*, termasuk R.
+
+Data spasial biasanya disajikan dalam bentuk peta tematik. Salah satu jenis peta yang banyak digunakan adalah peta *choropleth*, yaitu jenis peta tematik yang merepresentasikan data/statistik menggunakan berbagai gradasi warna dan simbol di atas area area geografis tertentu (misalnya negara, provinsi, kabupaten dan lain-lain)[@ANNISA].
+
+Pada artikel ini akan disajikan peta *choropleth* sebaran penduduk di Kota Bogor berdasarkan kecamatan. *Shapefile* diperoleh dari *website* [data.humdata.org](https://data.humdata.org/dataset/indonesia-administrative-boundary-polygons-lines-and-places-levels-0-4b) [@HUMDATA]. Sedangkan data penduduk diperoleh dari [Visualisasi Data Kependudukan](https://gis.dukcapil.kemendagri.go.id/peta/)
+Kementerian Dalam Negeri [@DUKCAPIL]. 
+
+# Paket yang Digunakan
+
+Ada beberapa *package* yang akan digunakan, yaitu `dplyr` untuk mengelola data frame, `sf` [@SF] untuk mengelola data spasial, `ggplot2` untuk membuat grafis dan `leaflet` untuk membuat peta interaktif. Silakan instal paket-paket tersebut terlebih dahulu:
+
+```{r, eval=FALSE}
+install.packages(c("dplyr", "sf", "ggplot2", "leaflet"))
+```
+
+Kemudian load ke dalam *working space*
+
+```{r}
+library(dplyr)
+library(sf)
+library(ggplot2)
+library(leaflet)
+```
+
+# Membaca Data Spasial
+
+Membaca data dapat dilakukan dengan menggunakan fungsi `st_read()` dari paket `sf`. Gambaran data dapat ditampilkan dengan fungsi `glimpse()` dari paket `dplyr`.
+
+Seluruh data yang digunakan dapat di download di [sini](https://drive.google.com/drive/folders/1arzJ_APPmu0Lft2-MbYl-AM7I3fVdyxW?usp=sharing)
+
+```{r}
+mapIndonesia <- st_read("data/map/shp/idn_admbnda_adm3_bps_20200401.shp", 
+                        quiet = TRUE)
+glimpse(mapIndonesia)
+```
+
+Terlihat bahwa data `mapIndonesia` hanya berisi informasi geografis. Untuk itu kita membutuhkan data tambahan.
+
+```{r}
+dataBogor <- read.csv("data/Demografi-Bogor.csv")
+dataBogor
+```
+
+
+Selanjutnya gabungkan kedua data tersebut menjadi satu. Karena kita hanya ingin menampilkan peta Kota Bogor, maka kita bisa gunakan fungsi `inner_join()` berdasarkan kolom `ADM3_PCODE` dari `mapIndonesia` dan kolom `KodeBPS` dari  `dataBogor`.
+
+```{r}
+mapBogor<- mapIndonesia %>%
+  inner_join(dataBogor, by = c("ADM3_PCODE" = "KodeBPS"))
+mapBogor
+```
+
+## Peta Statis dengan `ggplot2`
+
+Data spasial dan informasi jumlah penduduk kota bogor sudah tersedia dalam satu *dataframe*. Untuk menyajikan dalam peta, beberapa paket R dapat digunakan. Untuk jenis peta statis (biasanya untuk tujuan dicetak)  paket `ggplot2` [@GGPLOT2] bisa menjadi pilihan yaitu dengan fungsi `geom_sf()`. 
+
+Konsep dari `ggplot2` dalam visualisasi data adalah dengan mengkombinasikan *data*, *stat* dan *geom* atau layer. Pada perintah berikut, `ggplot()` akan menginisiasi layer kosong yang siap ditambahkan layer-layer lain diatasnya. Lalu `geom_sf()` akan memetakan data `mapBogor`, di mana setiap area/poligon akan diberi gradasi warna sesuai nilai pada kolom `JumlahPenduduk`.
+
+
+```{r}
+p <- ggplot() +  
+  geom_sf(data=mapBogor, aes(fill=JumlahPenduduk))
+p
+```
+
+`ggplot2` dilengkapi dengan banyak opsi untuk mengatur tampilkan dari output. Misalnya `scale_fill_gradientn()` untuk mengatur gradasi warna (secara otomatis ataupun *costum*), `labs()` untuk menambahkan judul grafik maupun keterangan sumbu, `theme()` untuk mengatur tema (legenda, jenis dan ukuran huruf, dan lain-lain), `scale_**_continuous()` pengaturan sumbu tegak maupun sumbu mendatar. 
+
+```{r}
+colorPalette = RColorBrewer::brewer.pal(5,"YlGnBu")
+legendBreak = c(120,170,230)*1000
+yBreak = seq(106.72, 106.86, by=0.04)
+
+p + scale_fill_gradientn(colors = colorPalette, 
+                       breaks = legendBreak, 
+                       name = "Jumlah Penduduk") +
+  labs(title = "Jumlah Penduduk Kota Bogor")  +
+  theme(legend.text = element_text(size=7),
+        legend.title = element_text(size=7),
+        axis.text.x = element_text(size = 7),
+        axis.text.y = element_text(size = 7),
+        title = element_text(size=12, face='bold')) +
+  scale_x_continuous(breaks = yBreak) 
+```
+
+
+## Peta Interaktif dengan `leaflet`
+
+Selain secara statis, peta *choropleth* juga dapat ditampilkan secara dinamis atau interaktif. Biasanya jika peta yang dibuat akan ditampilkan dalam halaman web. Disebut interaktif karena pengguna tidak hanya bisa "melihat" peta saja, tapi juga bisa berinteraksi langsung seperti memilih *layer* yang akan ditampilkan, memperbesar atau memperkecil peta, menyorot bagian tertentu pada peta untuk menampilkan data atau statistik, dan lain-lain.
+
+**Leaflet** adalah salah satu *JavaScript library* yang paling populer untuk membuat peta interaktif. Untuk yang tidak familiar dengan *JavaScript*, peta *leaflet* dapat dibuat dibuat, diatur dan diintegrasikan dengan R menggunakan paket `leaflet`[@LEAFLET]. 
+
+Peta yang dibuat dengan `leaflet` dapat diintegrasikan dalam *RMarkdown* dan aplikasi *Shinny* dengan cara yang mirip dengan `ggplot2`.
+
+Berikut perintah-perintah untuk menampilkan jumlah penduduk Kota Bogor dengan peta *leaflet*.
+
+1. `leaflet()`: inisiasi peta dengan memanggil fungsi `leaflet()`
+2. `addProviderTiles()`: menambahkan peta dasar *(base map)* dengan perintah 
+3. `addPolygons()`: menabahkan poligon dengan gradasi warna berdasarkan jumlah penduduk. Pengaturan warna gradasi menggunakan `colorNumeric()`. Ditambahkan pula opsi label untu menampilkan *popup*, yang akan muncul ketika pengguna menyorot area tertentu.
+4. `addLegend()`: menambahkan legenda
+5. `addLayersControl()`: menampilkan tombol untuk memilih layer yang akan ditampilkan
+6. `setView()`: mengatur posisi dan *zooming* *default* 
+
+
+```{r}
+# membuat custom palette warna
+populationPalette <- colorNumeric(
+  palette = "YlGnBu",
+  domain = mapBogor$JumlahPenduduk
+)
+
+# membuat custom popup
+popupLabel <- paste0(
+    "<b>Kecamatan ", mapBogor$Kecamatan,"</b><br/>", 
+    "Jumlah Penduduk (jiwa): ", mapBogor$JumlahPenduduk, "<br/>", 
+    "Luas Wilayah (km2): ", mapBogor$LuasWilayah, "<br/>", 
+    "Kepadatan Penduduk (jiwa/km2): ", mapBogor$KepadatanPenduduk) %>%
+  lapply(htmltools::HTML)
+```
+
+```{r,out.width = '100%'}
+
+# membuat peta leaflet
+leaflet(mapBogor) %>% 
+  addProviderTiles(providers$CartoDB.PositronNoLabels, group = "Light Mode") %>%
+  addProviderTiles(providers$CartoDB.DarkMatterNoLabels, group = "Dark Mode") %>%
+  
+  addPolygons(weight = 1,
+              opacity = 1, 
+              fillOpacity = 0.9,
+              label = popupLabel,
+              color = ~populationPalette(JumlahPenduduk),
+              highlightOptions = highlightOptions(color = "white", 
+                                                  weight = 2, 
+                                                  bringToFront = TRUE) ) %>%
+  addLegend(position = "bottomright", 
+            pal = populationPalette, 
+            values = ~JumlahPenduduk,
+            title = "Jumlah\nPenduduk",
+            opacity = 1) %>%
+  
+  addLayersControl(position = 'topright',
+                   baseGroups = c("Light Mode", "Dark Mode"),
+                   options = layersControlOptions(collapsed = FALSE)) %>%
+  
+  setView(lat = - 6.595, lng = 106.87, zoom = 12)
+```
+
+Output peta di atas dapat diperbesar atau diperkecil, dan jika pengguna menyorot area tertentu maka akan muncul beberapa data dalam bentuk pop-up. Juga dapat memilih basemap yang akan digunakan, apakah terang atau gelap. 
+
+Sebetulnya peta ini masih bisa dikembangkan, misalnya dengan menambahkan data lain seperti kepadatan penduduk, jumlah penduduk menurut jenis kelamin dan data-data lainnya lalu pengguna diberi pilihan untuk memilih data apa yang ingin dilihatnya.
+
+---
+
+
+
+
+
+
