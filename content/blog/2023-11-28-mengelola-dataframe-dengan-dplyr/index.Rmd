@@ -1,0 +1,350 @@
+---
+title: Mengelola Dataframe dengan dplyr
+author: Nur Andi Setiabudi
+date: '2023-11-28'
+slug: mengelola-dataframe-dengan-dplyr
+categories:
+  - r
+  - data manipulation
+tags:
+  - r
+  - dplyr
+  - data manipulation
+showtoc: true
+tocopen: true
+bibliography: bibliography.bib
+link-citations: yes
+---
+
+
+
+```{r setup, include=FALSE}
+library(knitr)
+
+## Global options
+options(max.print="75")
+opts_chunk$set(echo=TRUE,
+               eval=TRUE,
+               tidy=TRUE,
+               comment=NA,
+               message=FALSE,
+               warning=FALSE)
+opts_knit$set(width=75)
+```
+
+
+Aktivitas apa yang biasa dilakukan oleh *data scientist* terhadap data tabular? Barangkali menghapus kolom atau baris, melakukan transformasi untuk menambahkan kolom baru atau melakukan agregasi. Aktivitas-aktivitas tersebut sering disebut sebagai *data wrangling* [@OHI] atau manipulasi data (dalam konitasi positif) yang bertujuan untuk mengubah data menjadi format yang lebih mudah digunakan atau mudah dipahami. Manipulasi data menjadi bagian tidak diterpisahkan dalam persiapan data yang umumnya membutuhkan waktu paling lama dari keseluruhan rangkaian analisis data. Skenario dalam proses ini berbeda-beda tergantung pada data yang digunakan dan tujuan yang ingin dicapai [@HBR].
+
+# R, `tidyverse` dan `dplyr`
+
+Sebagai bahasa pemrograman populer dalam sains data, R menyediakan berbagai paket/*library* untuk tujuan-tujuan spesifik. Sebagai contoh, kita dapat memanfaatkan paket `tidyverse`; sekumpulan beberapa paket untuk ekplorasi, manipulasi dan visualisasi data [@TIDYVERSE], yang terdiri dari paket-paket antara lain:
+
+* `ggplot2` : membuat grafik dan visualisasi data
+* `dplyr` : manipulasi data
+* `tidyr` : membentuk *"tidy data"*, yaitu data dalam format yang konsisten
+* `readr` : membaca berbagai data tabular
+* `purrr` : bekerja dengan fungsi dan vektor
+* `tibble` : bentuk lain dari *data frame* yang lebih modern
+* `stringr` : bekerja dengan *string*
+* `forcats` : bekerja dengan *factor*
+* `lubridate` : bekerja dengan data berformat tanggal dan waktu
+
+![tidyverse. Sumber gambar: Che Smith (chsmith1@davidson.edu)](image/ggplot_hive.jpg)
+
+Artikel ini akan fokus pada pemanfaatan paket `dplyr` [@DPLYR]. Paket yang dikembangkan oleh Hadley Wickham dan tim ini  dipandang sebagai *"grammar"* yang di dalamnya tersedia sejumlah *"verb"* untuk menyesaikan berbagai pekerjaan terkait manipulasi data  [@DPLYR2], di antaranya untuk:
+
+*  memilih kolom,
+*  menyeleksi baris berdasarkan kriteria tertentu,
+*  agregasi data,
+*  menghitung kolom/variabel baru,
+*  mengatur urutan baris, dan lain-lain
+
+
+# Studi Kasus: Data MovieLens
+
+Untuk mengeksplorasi dasar-dasar manipulasi data dengan `dplyr`, kita akan menggunakan data **MoviLens** [@MOVIELENS], yang bisa diperoleh dari paket `dslabs`. Data set ini berisi rating dari *movie*/film dari website [MovieLens](https://movielens.org/) yang dikumpulkan dan dikelola oleh GroupLens, kelompok riset di [Universitas Minnesota](https://twin-cities.umn.edu/)
+
+## Persiapan
+
+Instalasi paket-paket yang diperlukan, yaitu `tidyverse` (atau cukup `dplyr`) dan `dslabs`. Instalasi paket ini sifatnya opsional. Maksudnya apabila paket tersebut sudah terinstal maka tidak perlu melakukan instalasi lagi.
+
+```{r, eval=FALSE}
+install.packages(c("tidyverse","dslabs"))
+```
+
+Lalu *load* paket-paket tersebut.
+
+```{r}
+library(tidyverse)
+library(dslabs)
+```
+
+Selanjutnya *load* data `movilens` dari paket `dslabs`
+
+```{r}
+data(movielens)
+```
+
+Sebelum memulai proses manipulasi data, sangat direkomendasikan untuk melihat bentuk dan struktur data. 
+Kita sudah mempunyai data `movilens`, yang merupakan sebuah *data frame*, yang dapat kita ubah menjadi `tibble` agar lebih mudah dalam menginspeksi data, terutama data yang berukuran besar. Sebuah `tibble` apabila ditampilkan dalam layar, hanya muncul maksimal 10 baris pertama, dilengkapi dengan informasi mengenai dimensi tabel, nama dan tipe kolom serta tampilan akan menyesuaikan lebar layar.
+
+
+```{r}
+movielens <- as_tibble(movielens)
+movielens
+```
+
+Alternatif lain untuk menampilkan struktur data adalah fungsi `glimpse`. Fungsi ini sebenernya mirip dengan fungsi `str` dari paket `utils`.
+
+```{r}
+glimpse(movielens)
+```
+
+Dari output di atas kita tahun bahwa data `movielens` terdiri dari `r nrow(movielens)` baris dan `r ncol(movielens)` kolom, yaitu
+
+
+| Nama      | Tipe | Contoh          | Keterangan                                    |
+|-----------|------|-----------------|-----------------------------------------------|
+| movieId   | int  | 31              | ID film                                       |
+| title     | chr  | Dangerous Minds | Judul film                                    |
+| year      | int  | 1995            | Tahun rilis                                   |
+| genres    | fct  | Drama           | *Genre*/aliran (bisa terdapat beberapa genre) |
+| userId    | int  | 1               | ID pengguna                                   |
+| rating    | dbl  | 2.5             | Rating                                        |
+| timestamp | int  | 1260759144      | Waktu dalam format *unix timestamp*           |
+
+
+## Operator *pipe* `%>%`
+
+Sebelum membahas `dplyr` lebih lanjut, mari berkenalan dengan operator *pipe* `%>%`. *Pipe* merupakan operator yang berasal dari paket `magrittr` [@MAGRITTR], yang dalam `tidyverse` dimuat secara otomatis. 
+
+Perhatikan perintah berikut ini.
+
+```{r, eval=FALSE}
+nama_fungsi(nama_object)
+```
+
+apabila ditulis dengan *pipe*, akan menjadi
+
+```{r, eval=FALSE}
+nama_object %>% nama_fungsi
+```
+
+Operator *pipe* sangat bermafaat untuk menuliskan banyak operasi secara sekuensial atau berurutan. Sebagai contoh, kita ingin membulatkan vektor numerik hingga dua tempat desimal, mengurutkannya dari besar ke kecil, lalu tampilkan enam elemen pertama.
+
+```{r}
+set.seed(123)
+number_data <- runif(n = 15, min = 0, max = 100)
+```
+
+Dengan *base R* dapat kita tulis
+
+
+```{r}
+head(sort(round(number_data, digit = 2), decreasing = TRUE))
+```
+
+Dengan operator *pipe* menjadi:
+
+```{r}
+number_data %>%
+  round(digits = 2) %>%
+  sort(decreasing = TRUE) %>%
+  head()
+```
+
+## `dplyr`*'s verbs*
+
+Sebagai *"grammar"* untuk manipulasi data, paket `dplyr` mempunyai setidaknya lima *"verbs"* utama, masing-masing mempunya fungsi yang spesifik, yaitu:
+
+* `select()` : memilih kolom
+* `filter()` : menyeleksi baris berdasarkan kriteria tertentu
+* `summarise()` : meringkas atau agregasi data
+* `mutate()` : menghitung kolom/variabel baru
+* `arrange()` : mengatur urutan baris
+
+Selain fungsi-fungsi di atas, masih banyak fungsi lain yang dapat digunakan, misalnya `group_by()` untuk pengelompokan data. Mari kita eksplorasi lebih lanjut.
+
+
+## Memilih kolom: `select()`
+
+Ketika bekerja dengan data yang mempunyai banyak kolom, biasanya kita ingin memilih kolom-kolom tertentu saja. Hal ini bisa kita lakukan dengan memanfaatkan fungsi `select()`berdasarkan nama atau posisi kolom. Misalnya dua perintah berikut akan memilih kolom `title`, `year` dan `genres` dari `movielens`. 
+
+
+```{r}
+movielens %>%
+  select(title, year, genres)
+```
+
+```{r}
+movielens %>%
+  select(2, 3, 4)
+```
+
+Kita dapat menambahkan tanda minus `-` untuk tidak memilih kolom tersebut.
+
+```{r}
+movielens %>%
+  select(-title, -year, -genres)
+```
+
+Ada sejumlah fungsi pembantu *(helper function)* yang bisa digunakan dalam `select()`, di antaranya:
+
+* `starts_with("abc")` : nama kolom diawali "abc".
+* `ends_with("xyz")` : nama kolom diakhiri "xyz".
+* `contains("ijk")` : nama kolom mengandung "ijk".
+* `num_range("x", 1:3)` : memilih kolom `x1`, `x2` dan `x3`.
+
+Selain memilih kolom, `select()` juga dapat digunakan untuk mengubah nama kolom, misalnya
+
+```{r}
+movielens %>%
+  select(movie_title = title, year, genres)
+```
+
+
+## Menyeleksi baris: `filter()`
+
+`filter()` digunakan untuk menyeleksi atau memilih baris atau observasi berdasarkan nilainya. Misalnya kita ingin menampilkan film-film yang dirilis tahun 1995.
+
+```{r}
+movielens %>%
+  filter(year == 1995)
+```
+
+Dalam `filter()`, kita dapat menggunakan berbagai operator, seperti operator dasar `<`, `<=`, `>`, `>`, `==` (sama dengan) dan `%in%` (bagian dari). Argumen `filter()` yang lebih dari satu dapat digabungkan dengan *bolean* operator, yaitu `&` (*and*/dan), `|` (*or*/atau) dan `!` (*not*/tidak). Misalnya untuk menampilkan film-film yang dirilis tahun 1995 dan 1996 serta beraliran/*genre* hanya drama:
+
+```{r}
+movielens %>%
+  filter(year %in% c(1995, 1996) & genres == 'Drama')
+```
+
+Sekarang, kolom `genres` hanya berisi satu nilai yaitu `Drama` sehingga kita bisa harus kolom tersebut 
+
+```{r}
+movielens %>%
+  filter(year %in% c(1995, 1996) & genres == 'Drama') %>%
+  select(-genres)
+```
+
+## Menambah kolom: `mutate()`
+
+Selain menggunakan kolom yang sudah tersedia dalam data, seringkali kita ingin membuat kolom baru yang merupakan turunan dari kolom yang sudah ada. Dalam `movielens`, kolom `timestamp` ditulis dalam format `unix timestamp` (jumlah detik dihitung sejak 1 Januari 1970, jam 00:00:00 UTC). Agar lebih mudah dipahami, kita dapat membuat kolom baru dengan mengubah kolom tersebut ke format *datetime*.
+
+```{r}
+movielens %>%
+  mutate(ts = as.POSIXct(timestamp, origin = "1970-01-01")) %>%
+  select(-timestamp)
+```
+
+Contoh lain, kita ingin membuat kolom baru yang menyatakan bahwa film berjenis Drama atau bukan:
+
+```{r}
+movielens %>%
+  mutate(isDrama = grepl("Drama", genres))
+```
+
+Kedua perintah di atas dapat digabungkan menjadi
+
+```{r}
+movielens %>%
+  mutate(ts = as.POSIXct(timestamp, origin = "1970-01-01"), 
+         isDrama = grepl("Drama", genres)) %>%
+  select(-timestamp)
+```
+
+## Meringkas data: `summarise()`
+
+`summarise()` berfungsi untuk meringkas atau agregasi baris data, seperti untuk menghitung banyaknya pengamatan, nilai tengah, total, nilai maksimum dan minimum, dan lain-lain. 
+
+
+```{r}
+movielens %>% 
+  summarise(uniqueTitle = n_distinct(title),
+            totalReview = n(),
+            avgRating = mean(rating))
+```
+
+Contoh di atas menghitung banyaknya baris, banyaknya judul unik, dan rata-rata dari rating dalam keseluruhan *dataframe*, dan meringkasnya menjadi satu baris. Kita dapat melakukan agregasi untuk setiap kelompok/*group*/*class* satu kolom atau lebih, dengan memanfaatkan perintah `group_by()`. Misalnya, contoh di atas dapat dimodifikasi agar perhitungan dilakukan untuk setiap tahun rilis. Dengan menambahkan `group_by(year)`, maka perintah yang dimaksud adalah sebagai berikut:
+
+
+```{r}
+movielens %>% 
+  group_by(year) %>%
+  summarise(uniqueTitle = n_distinct(title),
+            totalReview = n(),
+            avgRating = mean(rating))
+```
+
+Terlihat bahwa kolom tahun bersifat unik, artinya satu tahun hanya menempati satu baris.
+
+`mutate()` juga dapat dipasangkan dengan `group_by()`, sehingga kolom baru yang terbentu akan berisi nilai agregat yang dihitung per grup. Misal
+
+
+```{r}
+movielens %>% 
+  group_by(year) %>%
+  mutate(uniqueTitle = n_distinct(title),
+            totalReview = n(),
+            avgRating = mean(rating)) %>%
+  filter(year < 1920) 
+```
+
+Perhatikan output diatas, untuk kelompok tahun yang sama, maka `uniqueTitle`, `totalReview` dan `avgRating` juga sama nilainya.
+
+
+## Mengurutkan baris: `arrange()`
+
+Data yang terurut umumnya lebih mudah dibaca. Di paket `dplyr` kita dapat mengurutkan *dataframe* berdasarkan kolom tertentu dengan fungsi `arrange()`. Contoh sebelumnya, misalnya, dapat kita urutkan dari tahun terlama ke tahun terbaru sebagai berikut:
+
+```{r}
+movielens %>% 
+  group_by(year) %>%
+  mutate(uniqueTitle = n_distinct(title),
+            totalReview = n(),
+            avgRating = mean(rating)) %>%
+  filter(year < 1920) %>%
+  arrange(year)
+```
+
+## Gabungan beberapa fungsi sekaligus
+
+Setelah mempraktikan bagaimana menggunakan fungsi-fungsi dasar `dplyr`, mari gabungkan beberapa fungsi dalam satu perintah.
+
+**Contoh 1:** Katakan untuk setiap film drama, kita ingin menghitung berapa banyak penilaian yang diberikan pada tahun perdana dan tahun-tahun setelahnya. Hasilnya diurutkan dari yang mendapat penilaian terbanyak di tahun perdana.
+
+```{r}
+movielens %>% 
+  filter(grepl("Drama", genres)) %>%
+  mutate(yearRating = as.numeric(format(as.POSIXct(timestamp, origin = "1970-01-01"), "%Y"))) %>%
+  mutate(firstYear = year == yearRating, nextYear = year < yearRating) %>%
+  group_by(title) %>%
+  summarise(firstYear = sum(firstYear), nextYear = sum(nextYear)) %>%
+  arrange(desc(firstYear))
+```
+
+**Contoh 2:** Kita akan menampilkan satu film dengan rata-rata rating terbaik untuk setiap tahun perilisan. Jika ada beberapa film yang mempunyai rating tertinggi, maka dipilih film dengan jumlah rating terbanyak. Hasil akhir berupa *dataframe* dengan kolom tahun, judul dan rata-rata rating.
+
+
+```{r}
+movielens %>% 
+  group_by(year, title) %>%
+  summarise(avgRating = mean(rating), nRating = n()) %>%
+  group_by(year) %>%
+  arrange(year, desc(avgRating), desc(nRating)) %>%
+  mutate(rn = row_number()) %>%
+  filter(rn == 1) %>%
+  select(-rn, -nRating) %>%
+  ungroup()
+```
+
+---
+
+Dari hasil eksplorasi di atas, paket `dplyr` yang merupakan salah satu bagian inti dari paket `tidyverse` merupakan alat yang bisa diandalkan untuk manipulasi *dataframe* dalam R. Meskipun demikian, untuk keperluan yang lebih komplek, `dplyr` membutuhkan fungsi-fungsi yang tersedia di paket lain, baik itu paket bawaan seperti `base` dan `utils`, maupun paket lain. Misalnya untuk mengolah data *string/text* bisa menggunakan paket `stringr`, data berformat tanggal dan waktu bisa menggunakan paket `lubridate`. Sementara untuk melakukan *pivoting* atau *un-pivoting* bisa menggunakan paket `tidyr`.
+
+Contoh-contoh lain dalam menggunakan `dplyr` dapat dipelajari di buku *R for Data Science* [@RDS].
+
+---
+
+
+
