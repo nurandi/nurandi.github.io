@@ -11,7 +11,7 @@ tags:
   - visualization
   - ggplot2
   - leaflet
-bibliography: ../../bibliography.bib
+bibliography: bibliography.bib
 ---
 
 <script src="{{< blogdown/postref >}}index_files/htmlwidgets/htmlwidgets.js"></script>

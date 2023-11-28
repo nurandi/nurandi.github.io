@@ -11,7 +11,7 @@ tags:
   - visualization
   - ggplot2
   - leaflet
-bibliography: ../../bibliography.bib
+bibliography: bibliography.bib
 ---
 
 ```{r setup, include=FALSE} 
@@ -178,6 +178,7 @@ Output peta di atas dapat diperbesar atau diperkecil, dan jika pengguna menyorot
 Sebetulnya peta ini masih bisa dikembangkan, misalnya dengan menambahkan data lain seperti kepadatan penduduk, jumlah penduduk menurut jenis kelamin dan data-data lainnya lalu pengguna diberi pilihan untuk memilih data apa yang ingin dilihatnya.
 
 ---
+
 
 
 
