@@ -111,7 +111,7 @@ ggplotly(p, tooltip = c("label", "label1", "label2", "label3")) %>%
 
 Taddaaa !!! *Split-chart* Strava ala-ala berhasil kita buat.
 
-Perintah `ggplotly` berfungsi untuk mengkonversi grafik `ggplot` menjadi `plotly`. Hampir semua `geom_` dapat dikonversi menggunakan fungsi ini. `autorange = "reversed"` berfungsi untuk membalik titik koordinat. Sedangkan `tooltips` berguna untuk menampilkan *tooltips* atau data yang akan muncul ketika chart kita sorot dengan *mouse*. Kolom `label.?` sudah kita siapkan sebelumnya saat membuat `ggplot` tadi.
+Perintah `ggplotly` berfungsi untuk mengkonversi grafik `ggplot` menjadi `plotly`. Hampir semua `geom_` dapat dikonversi menggunakan fungsi ini. Pada pengaturan `layout`, kita tambahkan opsi autorange = "reversed"` berfungsi untuk membalik titik koordinat. Sedangkan `tooltips` berguna untuk menampilkan *tooltips* atau data yang akan muncul ketika chart kita sorot dengan *mouse*. Kolom `label.?` sudah kita siapkan sebelumnya saat membuat `ggplot` tadi.
 
 Semoga bermanfaat :)
 
