@@ -37,6 +37,12 @@ padding-right: 0.5em;
 }
 
 /* html widget */
-.leaflet {
+.html-widget {
 	margin-bottom: 20px;
+	width: 100% !important;
 }
+
+/* hide bar in plotly */
+.modebar {
+	display: none !important;
+	}
