@@ -47,6 +47,10 @@ padding-right: 0.5em;
 	display: none !important;
 }
 
-g.infolayer g.g-gtitle text{
-	font-size: calc(14px + (30 - 14) * ((100vw - 300px) / (1600 - 300))) !important;
-  }
+
+@media only screen and (max-width: 768px) {
+	g.infolayer g.g-gtitle text, g.g-xtitle text, g.g-ytitle text{
+		font-size: 70% !important;
+		word-wrap: break-word;
+	}
+}
