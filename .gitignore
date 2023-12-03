@@ -7,3 +7,4 @@
 /public/
 /resources/
 '.Rproj.user/**' 
+**/index_cache/
