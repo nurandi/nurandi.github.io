@@ -105,8 +105,7 @@ Kita coba konversikan plot `p` tadi dengan perintah berikut ini.
 library(plotly)
 
 ggplotly(p, tooltip = c("label", "label1", "label2", "label3")) %>%
-  layout(yaxis = list(autorange = "reversed")) %>%
-  config(displayModeBar = FALSE)
+  layout(yaxis = list(autorange = "reversed"))
 ```
 
 
