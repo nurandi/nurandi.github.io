@@ -42,7 +42,11 @@ padding-right: 0.5em;
 	width: 100% !important;
 }
 
-/* hide bar in plotly */
+/* plotly */
 .modebar {
 	display: none !important;
 }
+
+g.infolayer g.g-gtitle text{
+	font-size: calc(14px + (30 - 14) * ((100vw - 300px) / (1600 - 300))) !important;
+  }
