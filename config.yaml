@@ -10,7 +10,6 @@ buildFuture: false
 buildExpired: false
 enableEmoji: true
 pygmentsUseClasses: true
-# googleAnalytics: UA-123-45
 
 minify:
     disableXML: true
@@ -63,6 +62,8 @@ params:
     ShowRssButtonInSectionTermList: true
     ShowToc: false
     comments: true
+    googleAnalyticsID: G-R90JDQGV7Z
+    disqusShortname: "nurandi-id"
     # images: ["papermod-cover.png"]
 
     profileMode:
@@ -171,7 +172,6 @@ services:
     twitter:
         disableInlineCSS: true
 
-disqusShortname: "nurandi-id"
 
 
 
